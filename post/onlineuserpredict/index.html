@@ -29,10 +29,10 @@
 <meta property="og:title" content="OnlineUserPredict" />
 <meta name="twitter:title" content="OnlineUserPredict" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="/post/onlineuserpredict/" /><meta property="og:description" content="onlineUserPredict 项目复现 项目内容 云计算平台以虚拟机为单位按时计算费用，虚拟机数量与在线用户的人数成正比。准确预测在线用户数量，租用合适数量的虚拟机可以节约大量的费用。 本项目提出了一个基于双层模型的网络游戏在线用户人" />
-<meta name="twitter:description" content="onlineUserPredict 项目复现 项目内容 云计算平台以虚拟机为单位按时计算费用，虚拟机数量与在线用户的人数成正比。准确预测在线用户数量，租用合适数量的虚拟机可以节约大量的费用。 本项目提出了一个基于双层模型的网络游戏在线用户人" /><meta property="og:image" content="/img/og.png" />
+<meta property="og:url" content="https://gruiaaa.github.io/post/onlineuserpredict/" /><meta property="og:description" content="onlineUserPredict 项目复现 项目内容 云计算平台以虚拟机为单位按时计算费用，虚拟机数量与在线用户的人数成正比。准确预测在线用户数量，租用合适数量的虚拟机可以节约大量的费用。 本项目提出了一个基于双层模型的网络游戏在线用户人" />
+<meta name="twitter:description" content="onlineUserPredict 项目复现 项目内容 云计算平台以虚拟机为单位按时计算费用，虚拟机数量与在线用户的人数成正比。准确预测在线用户数量，租用合适数量的虚拟机可以节约大量的费用。 本项目提出了一个基于双层模型的网络游戏在线用户人" /><meta property="og:image" content="https://gruiaaa.github.io/img/og.png" />
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:image" content="/img/og.png" /><meta property="article:published_time" content="2023-01-16T21:26:18+08:00" /><meta property="article:modified_time" content="2023-01-16T21:26:18+08:00" />
+<meta name="twitter:image" content="https://gruiaaa.github.io/img/og.png" /><meta property="article:published_time" content="2023-01-16T21:26:18+08:00" /><meta property="article:modified_time" content="2023-01-16T21:26:18+08:00" />
 
 
 <style>
@@ -50,7 +50,7 @@
 
 
 
-<link rel="stylesheet" href="/assets/css/fuji.min.774c4177575d9dd8524386342418e1138d5abaa673b2ea376703b2092f00f72c894b8986b28593437bb18adcd429c639aee1c1685f77188edb052335fd103b24.css" integrity="sha512-d0xBd1ddndhSQ4Y0JBjhE41auqZzsuo3ZwOyCS8A9yyJS4mGsoWTQ3uxitzUKcY5ruHBaF93GI7bBSM1/RA7JA==" />
+<link rel="stylesheet" href="https://gruiaaa.github.io/assets/css/fuji.min.774c4177575d9dd8524386342418e1138d5abaa673b2ea376703b2092f00f72c894b8986b28593437bb18adcd429c639aee1c1685f77188edb052335fd103b24.css" integrity="sha512-d0xBd1ddndhSQ4Y0JBjhE41auqZzsuo3ZwOyCS8A9yyJS4mGsoWTQ3uxitzUKcY5ruHBaF93GI7bBSM1/RA7JA==" />
 
 
 
@@ -82,7 +82,7 @@
     <header>
     <div class="container-lg clearfix">
         <div class="col-12 header">
-            <a class="title-main" href="">GRUIA</a>
+            <a class="title-main" href="https://gruiaaa.github.io">GRUIA</a>
             
             <span class="title-sub">不如烂键盘</span>
             
@@ -98,7 +98,7 @@
 <article>
     
     <h2 class="post-item post-title">
-        <a href="/post/onlineuserpredict/">OnlineUserPredict</a>
+        <a href="https://gruiaaa.github.io/post/onlineuserpredict/">OnlineUserPredict</a>
     </h2>
     <div class="post-item post-meta">
         <span><i class="iconfont icon-today-sharp"></i>&nbsp;2023-01-16</span>
@@ -236,8 +236,10 @@ hdfs dfs -du -h /user/GR/OUPD
 </li>
 <li>
 <p>t_game_bf.csv</p>
-<p><img class="img-zoomable" src="C:%5cUsers%5cGruia%5cAppData%5cRoaming%5cTypora%5ctypora-user-images%5cimage-20230110161614283.png" alt="image-20230110161614283" />
+<p><img class="img-zoomable" src="https://gruia-images-1309786869.cos.ap-chongqing.myqcloud.com/blogImg/image-20230116214305438.png" alt="image-202301162119473" />
 </p>
+</li>
+</ul>
 <blockquote>
 <p>数据存疑 2023/1/10</p>
 <p>车论文中所写数据集与关键字段如下</p>
@@ -255,8 +257,6 @@ hdfs dfs -du -h /user/GR/OUPD
 <p>​	2 hdfs://10.103.104.134:8020/cxl/bf_game</p>
 <p>中做数据迁移，在车hdfs数据集基础上复现。</p>
 </blockquote>
-</li>
-</ul>
 <h3 id="车s-hdfs-数据集">车&rsquo;s HDFS 数据集</h3>
 <p>车所给数据集预处理代码为 10.103.104.137:/home/CXL/data_g，复现项目中更名为onlineUserPredict/dataPreprocessing。</p>
 <p>从数据预处理代码（GameData.ipynb，Game_Data.ipynb，OnlineUsers2.ipynb）推断，预处理所用到的数据集主要有两个</p>
