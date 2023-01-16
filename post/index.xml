@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Posts on GRUIA</title>
+    <link>/post/</link>
+    <description>Recent content in Posts on GRUIA</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Mon, 16 Jan 2023 21:26:18 +0800</lastBuildDate><atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>OnlineUserPredict</title>
+      <link>/post/onlineuserpredict/</link>
+      <pubDate>Mon, 16 Jan 2023 21:26:18 +0800</pubDate>
+      
+      <guid>/post/onlineuserpredict/</guid>
+      <description>onlineUserPredict 项目复现 项目内容 云计算平台以虚拟机为单位按时计算费用，虚拟机数量与在线用户的人数成正比。准确预测在线用户数量，租用合适数量的虚拟机可以节约大量的费用。 本项目提出了一个基于双层模型的网络游戏在线用户人</description>
+    </item>
+    
+  </channel>
+</rss>
