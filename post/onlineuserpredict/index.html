@@ -104,7 +104,7 @@
     <div class="post-item post-meta">
         <span><i class="iconfont icon-today-sharp"></i>&nbsp;2023-01-16</span>
 
-<span><i class="iconfont icon-file-tray-sharp"></i>&nbsp;2685 words</span>
+<span><i class="iconfont icon-file-tray-sharp"></i>&nbsp;4063 words</span>
 
 
     </div>
@@ -115,6 +115,10 @@
 <p>云计算平台以虚拟机为单位按时计算费用，虚拟机数量与在线用户的人数成正比。准确预测在线用户数量，租用合适数量的虚拟机可以节约大量的费用。</p>
 <p>本项目提出了一个基于双层模型的网络游戏在线用户人数预测方法 N-BEATSx-N-HiTS，其特点是利用N-BEATSx 和 NHiTS 为底层预测模型，以随机森林方法进行结果拟合。</p>
 <p>在一个超大规模真实数据集上验证了该方法，该方法单步预测精度达到 97%，多步预测精度也远高于基线方法。根据预测结果租用合适数量的虚拟机，可以节约 40.09%的虚拟机租用成本。该方法能有效处理样本缺失和突发性在线人数剧烈增加的情况。</p>
+<hr>
+<h2 id="工作环境说明">工作环境说明</h2>
+<p>本地工作节点为10.103.104.117，用户ZSX，密码***</p>
+<p>onlineUserPredict 根目录为<code>/home/ZSX/gr/onlineUserPredict</code></p>
 <hr>
 <h2 id="工作目录说明">工作目录说明</h2>
 <p>2023/1/13 更新</p>
@@ -232,12 +236,12 @@ hdfs dfs -du -h /user/GR/OUPD
 </li>
 <li>
 <p>t_game_user_bf.csv</p>
-<p><img class="img-zoomable" src="https://gruia-images-1309786869.cos.ap-chongqing.myqcloud.com/blogImg/image-20230116211947301.png" alt="image-20230116211947301" />
+<p><img class="img-zoomable" src="C:%5cUsers%5cGruia%5cAppData%5cRoaming%5cTypora%5ctypora-user-images%5cimage-20230116214305438.png" alt="image-20230116214305438" />
 </p>
 </li>
 <li>
 <p>t_game_bf.csv</p>
-<p><img class="img-zoomable" src="https://gruia-images-1309786869.cos.ap-chongqing.myqcloud.com/blogImg/image-20230116214305438.png" alt="image-202301162119473" />
+<p><img class="img-zoomable" src="C:%5cUsers%5cGruia%5cAppData%5cRoaming%5cTypora%5ctypora-user-images%5cimage-20230110161614283.png" alt="image-20230110161614283" />
 </p>
 </li>
 </ul>
@@ -456,12 +460,43 @@ autoid,machid,bfpwd,host,dijin,currju,maxju,costtype,cost,rule1,rule2,rule3,rule
 <p>读取数据后通过max、min获取日期的起止时间，得到跨度天数，通过date_range生成起止时间序列，与数据做差集，即可得到数据集中缺失天数。如下图所示</p>
 <p><img class="img-zoomable" src="https://gruia-images-1309786869.cos.ap-chongqing.myqcloud.com/blogImg/image-20230116212104902.png" alt="image-20230116212104902" />
 </p>
-<p>将缺失值填充为0，画折线图即可直观看到缺失情况，如下图所示</p>
+<p>将缺失值填充为0，画折线图即可直观看到缺失情况，如下图所示，填充结果存储为<code>02_missingFilledData/filledWith0user.csv</code></p>
 <p><img class="img-zoomable" src="https://gruia-images-1309786869.cos.ap-chongqing.myqcloud.com/blogImg/image-20230116212124718.png" alt="image-20230116212124718" />
 </p>
 </li>
 </ul>
 <h3 id="异常值检测">异常值检测</h3>
+<p>异常检测（Anomaly detection）是定义是从正常的时间序列中识别不正常的事件或行为的过程。</p>
+<p>常用的异常检测算法可大致分为以下几种（来自网络，<a href="https://blog.csdn.net/weixin_52705010/article/details/115405905" target="_blank">参考1</a> <a href="https://zhuanlan.zhihu.com/p/500163005" target="_blank">参考2</a>）</p>
+<ul>
+<li>
+<p>统计方法</p>
+<p>最常用的方法就是基于k-sigma的同比算法，这是一个快速而且有效的算法。简单来说，即当前数据点的状态由之前不同周期的相同位置数据(比如上周或者前一天的同一时刻)决定，通过历史同期的数据分布来确定当前数据的合理波动范围。它的初始假设，是局部数据符合正态分布。这个算法有效利用了历史同期的数据，避免了全局使用唯一的固定阈值来衡量是否异常，同时还具有算法计算快速、原理易懂可解释的优点。</p>
+</li>
+<li>
+<p>预测方法</p>
+<p><strong>预测方法是异常检测中最常用的方法，基本思路是通过比较预测值和真实值的差异，判定是否异常</strong>。它包括传统的时序预测模型ARIMA、渐进梯度回归树GBRT、长短时记忆网络LSTM以及Facebook开源算法Prophet等等</p>
+</li>
+<li>
+<p>有监督学习</p>
+<p>有监督的算法有很多，如基于树模型的随机森林、lightGBM，神经网络MLP等等，其整体思路是提取各种各样的统计特征（如前几个数据点的原始值，最近一段时间的均值、标准差、偏度等等），直接丢给模型去训练，算法会根据标注自动选择最有效的特征用以建模。有监督算法往往可以获得更高的算法准确度，但缺点也是十分明显的——最大的问题就是，我们需要大量的人工标注，覆盖全面的数据类型和异常情况，而这在实际场景中是极难实现的。实际生产中，我们极少考虑这类算法，除非异常场景很明确且历史中存在多次相似的情况。</p>
+</li>
+<li>
+<p>深度学习检测</p>
+<p>最近几年，通过深度学习生成模型来做异常检测的算法越来越多，效果甚至可以超过一般的有监督学习方法。主要可以分为以下这么几种</p>
+<p>a) 针对正常数据进行训练建模，然后通过高重构误差来识别异常点，即生成式（Generative）的算法，往往是无监督的，如自编码器（Auto Encoder）类或者回声状态网络（Echo State Networks）。生成模型的优势就是算法准确率高、极少人工干预，但单纯的算法仍存在一些不足。如需要长时间表现稳定的历史数据，需要较长的训练时间，且同样会面临衡量差值大小与异常的关系这类问题等等。</p>
+<p>b) 对数据的概率分布进行建模，然后根据样本点与极低概率的关联性来识别异常点，如DAGMM</p>
+<p>c) 通过标注数据，告诉模型正常数据点长什么样，异常数据点长什么样，然后通过有监督算法训练分类模型，也称判别式（Discriminative）算法。</p>
+</li>
+</ul>
+<p>经过对异常值检测算法的简单了解，我在本项目中决定<strong>选用统计方法对异常值进行检测</strong>，原因是统计方法可自定义规则，计算快速，原理通俗易懂。</p>
+<p>统计方法中常见的方法如箱型图、3σ方法、分位点法、离群点检测都是基于非时序数据的方法，即它们所检测的是在一个整体数据集的情况下，所有数据偏离整体分布的情况，偏离一定程度即视为异常值。所以以上方法不适用于时序数据的检测。</p>
+<p>定义规则：<strong>第N个数据的值处于前7天数据均值上下15%之间时，视为正常值，否则为异常值</strong></p>
+<p>使用填充后的<code>filledWith0user.csv</code>进行异常值检测</p>
+<center class="half"> 
+    <img src="https://gruia-images-1309786869.cos.ap-chongqing.myqcloud.com/blogImg/image-20230204203327650.png" width=400/> 
+    <img src="https://gruia-images-1309786869.cos.ap-chongqing.myqcloud.com/blogImg/image-20230204203409976.png" width=400/> 
+</center>
 
     </div>
 </article>
@@ -513,6 +548,7 @@ autoid,machid,bfpwd,host,dijin,currju,maxju,costtype,cost,rule1,rule2,rule3,rule
         <h3>Table of Contents</h3><nav id="TableOfContents">
   <ul>
     <li><a href="#项目内容">项目内容</a></li>
+    <li><a href="#工作环境说明">工作环境说明</a></li>
     <li><a href="#工作目录说明">工作目录说明</a></li>
     <li><a href="#数据集准备">数据集准备</a>
       <ul>
@@ -595,6 +631,7 @@ autoid,machid,bfpwd,host,dijin,currju,maxju,costtype,cost,rule1,rule2,rule3,rule
         <nav id="TableOfContents">
   <ul>
     <li><a href="#项目内容">项目内容</a></li>
+    <li><a href="#工作环境说明">工作环境说明</a></li>
     <li><a href="#工作目录说明">工作目录说明</a></li>
     <li><a href="#数据集准备">数据集准备</a>
       <ul>
