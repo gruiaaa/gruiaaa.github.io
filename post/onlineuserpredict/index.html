@@ -104,7 +104,7 @@
     <div class="post-item post-meta">
         <span><i class="iconfont icon-today-sharp"></i>&nbsp;2023-01-16</span>
 
-<span><i class="iconfont icon-file-tray-sharp"></i>&nbsp;4063 words</span>
+<span><i class="iconfont icon-file-tray-sharp"></i>&nbsp;4431 words</span>
 
 
     </div>
@@ -451,7 +451,7 @@ autoid,machid,bfpwd,host,dijin,currju,maxju,costtype,cost,rule1,rule2,rule3,rule
 </ul>
 <p>此后项目在此三个数据集上进行。</p>
 <hr>
-<h2 id="数据缺失值检测--异常值检测--缺失值填充">数据缺失值检测 &amp; 异常值检测 &amp; 缺失值填充</h2>
+<h2 id="数据缺失值检测-缺失值填充--异常值检测">数据缺失值检测&amp; 缺失值填充 &amp; 异常值检测</h2>
 <h3 id="缺失值检测">缺失值检测</h3>
 <p>目的：在1day_TimedurationData基础上检测有无日期缺失。</p>
 <ul>
@@ -465,6 +465,9 @@ autoid,machid,bfpwd,host,dijin,currju,maxju,costtype,cost,rule1,rule2,rule3,rule
 </p>
 </li>
 </ul>
+<h3 id="缺失值填充">缺失值填充</h3>
+<p>在1day_TimeDuration.csv上通过缺失值检测可知缺少3天数据集，所以要进行缺失值填充。</p>
+<p>填充方法选取</p>
 <h3 id="异常值检测">异常值检测</h3>
 <p>异常检测（Anomaly detection）是定义是从正常的时间序列中识别不正常的事件或行为的过程。</p>
 <p>常用的异常检测算法可大致分为以下几种（来自网络，<a href="https://blog.csdn.net/weixin_52705010/article/details/115405905" target="_blank">参考1</a> <a href="https://zhuanlan.zhihu.com/p/500163005" target="_blank">参考2</a>）</p>
@@ -491,12 +494,49 @@ autoid,machid,bfpwd,host,dijin,currju,maxju,costtype,cost,rule1,rule2,rule3,rule
 </ul>
 <p>经过对异常值检测算法的简单了解，我在本项目中决定<strong>选用统计方法对异常值进行检测</strong>，原因是统计方法可自定义规则，计算快速，原理通俗易懂。</p>
 <p>统计方法中常见的方法如箱型图、3σ方法、分位点法、离群点检测都是基于非时序数据的方法，即它们所检测的是在一个整体数据集的情况下，所有数据偏离整体分布的情况，偏离一定程度即视为异常值。所以以上方法不适用于时序数据的检测。</p>
-<p>定义规则：<strong>第N个数据的值处于前7天数据均值上下15%之间时，视为正常值，否则为异常值</strong></p>
-<p>使用填充后的<code>filledWith0user.csv</code>进行异常值检测</p>
-<center class="half">
-    <img class="img-zoomable medium-zoom-image" src="https://gruia-images-1309786869.cos.ap-chongqing.myqcloud.com/blogImg/image-20230204203327650.png" width=400/> 
-    <img class="img-zoomable medium-zoom-image" src="https://gruia-images-1309786869.cos.ap-chongqing.myqcloud.com/blogImg/image-20230204203409976.png" width=400/> 
-</center >
+<p>定义规则：<strong>第N个数据的值处于前7个数据均值上下15%之间时，视为正常值，否则为异常值</strong></p>
+<p>以下在按天数进行异常值检测</p>
+<h4 id="0填充异常值检测">0填充异常值检测</h4>
+<p>使用填充后的<code>filledWith0user.csv</code>进行异常值检测。</p>
+<p>运行结果如下图</p>
+<p><img class="img-zoomable" src="https://gruia-images-1309786869.cos.ap-chongqing.myqcloud.com/blogImg/image-20230204211001029.png" alt="image-20230204211001029" />
+</p>
+<p>其中<code>-7dayMean</code>列为前7次数据的平均值，<code>percent</code>为该次数据在前7天平均值上的涨跌比率，<code>anomaly</code>为是否是异常值（超过上下15%）。</p>
+<p>在折线图中标出异常值如下图</p>
+<p><img class="img-zoomable" src="https://gruia-images-1309786869.cos.ap-chongqing.myqcloud.com/blogImg/image-20230204210343796.png" alt="image-20230204210343796" />
+</p>
+<p>涨跌比率随时间变化如下图</p>
+<p><img class="img-zoomable" src="https://gruia-images-1309786869.cos.ap-chongqing.myqcloud.com/blogImg/image-20230204210510071.png" alt="image-20230204210510071" />
+</p>
+<p>从图中结果分析，使用在0填充后的数据集上使用前N天均值检测异常值会出现0填充影响正常数据的情况（因为0拉低了平均值），所以使用未进行0填充的数据再进行一遍检测，且使用散点图绘图。</p>
+<h4 id="无填充异常值检测">无填充异常值检测</h4>
+<p>检测结果分别为</p>
+<p><img class="img-zoomable" src="https://gruia-images-1309786869.cos.ap-chongqing.myqcloud.com/blogImg/image-20230204214436036.png" alt="image-20230204214436036" />
+</p>
+<p><img class="img-zoomable" src="https://gruia-images-1309786869.cos.ap-chongqing.myqcloud.com/blogImg/image-20230204212021272.png" alt="image-20230204212021272" />
+</p>
+<p><img class="img-zoomable" src="https://gruia-images-1309786869.cos.ap-chongqing.myqcloud.com/blogImg/image-20230204212032553.png" alt="image-20230204212032553" />
+</p>
+<p>检测结果分别存储为<code>reslutFilledWith0.csv</code>,<code>reslutNoFilled.csv</code></p>
+<p>两个结果对比，取交集如下图，只有一个共同值。</p>
+<p><img class="img-zoomable" src="https://gruia-images-1309786869.cos.ap-chongqing.myqcloud.com/blogImg/image-20230204214553160.png" alt="image-20230204214553160" />
+</p>
+<table>
+<thead>
+<tr>
+<th><img class="img-zoomable" src="https://gruia-images-1309786869.cos.ap-chongqing.myqcloud.com/blogImg/image-20230204212032553.png" alt="image-20230204212032553" />
+</th>
+<th><img class="img-zoomable" src="https://gruia-images-1309786869.cos.ap-chongqing.myqcloud.com/blogImg/image-20230204212021272.png" alt="image-20230204212021272" />
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
 
     </div>
 </article>
@@ -562,9 +602,10 @@ autoid,machid,bfpwd,host,dijin,currju,maxju,costtype,cost,rule1,rule2,rule3,rule
         <li><a href="#复现">复现</a></li>
       </ul>
     </li>
-    <li><a href="#数据缺失值检测--异常值检测--缺失值填充">数据缺失值检测 &amp; 异常值检测 &amp; 缺失值填充</a>
+    <li><a href="#数据缺失值检测-缺失值填充--异常值检测">数据缺失值检测&amp; 缺失值填充 &amp; 异常值检测</a>
       <ul>
         <li><a href="#缺失值检测">缺失值检测</a></li>
+        <li><a href="#缺失值填充">缺失值填充</a></li>
         <li><a href="#异常值检测">异常值检测</a></li>
       </ul>
     </li>
@@ -645,9 +686,10 @@ autoid,machid,bfpwd,host,dijin,currju,maxju,costtype,cost,rule1,rule2,rule3,rule
         <li><a href="#复现">复现</a></li>
       </ul>
     </li>
-    <li><a href="#数据缺失值检测--异常值检测--缺失值填充">数据缺失值检测 &amp; 异常值检测 &amp; 缺失值填充</a>
+    <li><a href="#数据缺失值检测-缺失值填充--异常值检测">数据缺失值检测&amp; 缺失值填充 &amp; 异常值检测</a>
       <ul>
         <li><a href="#缺失值检测">缺失值检测</a></li>
+        <li><a href="#缺失值填充">缺失值填充</a></li>
         <li><a href="#异常值检测">异常值检测</a></li>
       </ul>
     </li>
