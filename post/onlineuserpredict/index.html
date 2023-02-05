@@ -29,8 +29,8 @@
 <meta property="og:title" content="OnlineUserPredict" />
 <meta name="twitter:title" content="OnlineUserPredict" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://gruiaaa.github.io/post/onlineuserpredict/" /><meta property="og:description" content="onlineUserPredict 项目复现 项目说明 项目内容 摘要 云计算平台以虚拟机为单位按时计算费用，虚拟机数量与在线用户的人数成正比。准确预测在线用户数量，租用合适数量的虚拟机可以节约大量的费用。 本项目提出了一个基于双层模型的网络游" />
-<meta name="twitter:description" content="onlineUserPredict 项目复现 项目说明 项目内容 摘要 云计算平台以虚拟机为单位按时计算费用，虚拟机数量与在线用户的人数成正比。准确预测在线用户数量，租用合适数量的虚拟机可以节约大量的费用。 本项目提出了一个基于双层模型的网络游" /><meta property="og:image" content="https://gruiaaa.github.io/img/og.png" />
+<meta property="og:url" content="https://gruiaaa.github.io/post/onlineuserpredict/" /><meta property="og:description" content="onlineUserPredict 项目复现 [toc] 项目说明 项目内容 摘要 云计算平台以虚拟机为单位按时计算费用，虚拟机数量与在线用户的人数成正比。准确预测在线用户数量，租用合适数量的虚拟机可以节约大量的费用。 本项目提出了一个基于双层模型的网络" />
+<meta name="twitter:description" content="onlineUserPredict 项目复现 [toc] 项目说明 项目内容 摘要 云计算平台以虚拟机为单位按时计算费用，虚拟机数量与在线用户的人数成正比。准确预测在线用户数量，租用合适数量的虚拟机可以节约大量的费用。 本项目提出了一个基于双层模型的网络" /><meta property="og:image" content="https://gruiaaa.github.io/img/og.png" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:image" content="https://gruiaaa.github.io/img/og.png" /><meta property="article:published_time" content="2023-01-16T21:26:18+08:00" /><meta property="article:modified_time" content="2023-01-16T21:26:18+08:00" />
 
@@ -104,13 +104,14 @@
     <div class="post-item post-meta">
         <span><i class="iconfont icon-today-sharp"></i>&nbsp;2023-01-16</span>
 
-<span><i class="iconfont icon-file-tray-sharp"></i>&nbsp;4252 words</span>
+<span><i class="iconfont icon-file-tray-sharp"></i>&nbsp;4249 words</span>
 
 
     </div>
     
     <div class="post-content markdown-body">
         <h1 id="onlineuserpredict-项目复现">onlineUserPredict 项目复现</h1>
+<p>[toc]</p>
 <h2 id="项目说明">项目说明</h2>
 <h3 id="项目内容">项目内容</h3>
 <p>摘要</p>
@@ -285,7 +286,6 @@ hdfs dfs -du -h /user/GR/OUPD
 <th>大小</th>
 <th>描述</th>
 <th>HDFS Url</th>
-<th>详细信息</th>
 </tr>
 </thead>
 <tbody>
@@ -295,8 +295,6 @@ hdfs dfs -du -h /user/GR/OUPD
 <td>7.9G</td>
 <td>每一对局的信息，包含用户ID，用户所属工会ID，起止时间等</td>
 <td>hdfs://10.103.104.117:9000<br />/user/GR/OUPD/matches_game</td>
-<td><img class="img-zoomable" src="https://gruia-images-1309786869.cos.ap-chongqing.myqcloud.com/blogImg/image-20230205173159633.png" alt="image-20230205173159633" />
-</td>
 </tr>
 <tr>
 <td>包房信息</td>
@@ -304,8 +302,6 @@ hdfs dfs -du -h /user/GR/OUPD
 <td>73.1G</td>
 <td>每个包房的信息，包含包房的底金，最大对局数、起止时间等</td>
 <td>hdfs://10.103.104.117:9000<br />/user/GR/OUPD/private_rooms_game</td>
-<td><img class="img-zoomable" src="https://gruia-images-1309786869.cos.ap-chongqing.myqcloud.com/blogImg/image-20230205173247303.png" alt="image-20230205173247303" />
-</td>
 </tr>
 </tbody>
 </table>
