@@ -104,7 +104,7 @@
     <div class="post-item post-meta">
         <span><i class="iconfont icon-today-sharp"></i>&nbsp;2023-01-16</span>
 
-<span><i class="iconfont icon-file-tray-sharp"></i>&nbsp;4249 words</span>
+<span><i class="iconfont icon-file-tray-sharp"></i>&nbsp;4498 words</span>
 
 
     </div>
@@ -441,6 +441,16 @@ hdfs dfs -du -h /user/GR/OUPD
 <h4 id="缺失值填充">缺失值填充</h4>
 <p>在1day_TimeDuration.csv上通过缺失值检测可知缺少3天数据集，所以要进行缺失值填充。</p>
 <p>填充方法选取NAOMI(非自回归多分辨率插补)进行填充，该方法为<a href="https://arxiv.org/abs/1901.10946" target="_blank">论文</a>所提出。</p>
+<p>简要读完论文及代码、查看之前代码的运行记录后，决定在复现中先跳过此步骤，使用之前的填充好的数据集，原因如下：</p>
+<ol>
+<li>填充一个属性列就需要13h+的时间来训练模型，一共需要填充五个，耗时久</li>
+<li>NAOMI官方代码修改较麻烦，魔改耗时久</li>
+<li>使用torch自建模型不太了解，需要花时间学习</li>
+</ol>
+<p>综上，以实现在线人数预测为目的，重点放在<strong>在线实现</strong>，所以可降低数据缺失值填充重要性，留待之后实现。</p>
+<p>之后使用车所给<code>rawdata</code>文件夹中的填充好的<code>rawdata_15min.csv</code></p>
+<h3 id="04n-beatsx-n-hits">04.N-BEATSx-N-HiTS</h3>
+<p>GPU服务器连接不上，只好搁置，等到校恢复正常后再进行。</p>
 
     </div>
 </article>
@@ -504,6 +514,7 @@ hdfs dfs -du -h /user/GR/OUPD
         <li><a href="#01joindata">01.joinData</a></li>
         <li><a href="#02timeduration">02.timeDuration</a></li>
         <li><a href="#03naomi">03.NAOMI</a></li>
+        <li><a href="#04n-beatsx-n-hits">04.N-BEATSx-N-HiTS</a></li>
       </ul>
     </li>
   </ul>
@@ -581,6 +592,7 @@ hdfs dfs -du -h /user/GR/OUPD
         <li><a href="#01joindata">01.joinData</a></li>
         <li><a href="#02timeduration">02.timeDuration</a></li>
         <li><a href="#03naomi">03.NAOMI</a></li>
+        <li><a href="#04n-beatsx-n-hits">04.N-BEATSx-N-HiTS</a></li>
       </ul>
     </li>
   </ul>
