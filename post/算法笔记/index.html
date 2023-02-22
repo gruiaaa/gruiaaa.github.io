@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<meta name="HandheldFriendly" content="True" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta name="generator" content="Hugo 0.109.0">
+
+
+
+<meta name="theme-color" content="#ffffff" />
+
+
+<title> - GRUIA</title>
+
+
+<meta name="author" content="Gruia" />
+
+
+<meta name="description" content="A minimal Hugo theme with nice theme color." />
+
+
+
+<meta property="og:title" content="" />
+<meta name="twitter:title" content="" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://gruiaaa.github.io/post/%E7%AE%97%E6%B3%95%E7%AC%94%E8%AE%B0/" /><meta property="og:description" content="第一章 算法概述 常见的时间复杂度，及其增长速度比较 时间复杂度反映的是随着问题规模的变大，计算所需的时间的增长速度，与系数的多少关系不大 渐进符号 O 大O 渐进上界 存在两个正常数c和n0，使得当n≥n0时，有f" />
+<meta name="twitter:description" content="第一章 算法概述 常见的时间复杂度，及其增长速度比较 时间复杂度反映的是随着问题规模的变大，计算所需的时间的增长速度，与系数的多少关系不大 渐进符号 O 大O 渐进上界 存在两个正常数c和n0，使得当n≥n0时，有f" /><meta property="og:image" content="https://gruiaaa.github.io/img/og.png" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="https://gruiaaa.github.io/img/og.png" />
+
+
+<style>
+    @media (prefers-color-scheme: dark) {
+        body[data-theme='auto'] img {
+            filter: brightness(60%);
+        }
+    }
+
+    body[data-theme='dark'] img {
+        filter: brightness(60%);
+    }
+</style>
+
+
+
+
+<link rel="stylesheet" href="https://gruiaaa.github.io/assets/css/fuji.min.cc1b078531f52a14fc2f4bb88d09799de908cb4a586c731716cf9f564e2e5042af9e06235a2d54efdd28c3272c357e62ac2ef87e06a99257b039e6c164914485.css" integrity="sha512-zBsHhTH1KhT8L0u4jQl5nekIy0pYbHMXFs&#43;fVk4uUEKvngYjWi1U790owycsNX5irC74fgapklewOebBZJFEhQ==" />
+
+
+
+
+
+
+
+
+    <link rel="icon" type="image/png" href="https://gruia-images-1309786869.cos.ap-chongqing.myqcloud.com/blogImg/logo.png" />
+</head>
+
+<body
+  data-theme="light"
+  data-theme-auto='false'
+  >
+    <script data-cfasync="false">
+  
+  var fujiThemeData = localStorage.getItem('fuji_data-theme');
+  
+  if (!fujiThemeData) {
+    localStorage.setItem('fuji_data-theme', 'auto');
+  } else {
+    
+    if (fujiThemeData !== 'auto') {
+      document.body.setAttribute('data-theme', fujiThemeData === 'dark' ? 'dark' : 'light');
+    }
+  }
+</script>
+
+    <header>
+    <div class="container-lg clearfix">
+        <div class="col-12 header">
+            <a class="title-main" href="https://gruiaaa.github.io">GRUIA</a>
+            
+            <span class="title-sub">不如烂键盘</span>
+            
+        </div>
+    </div>
+</header>
+
+    <main>
+        <div class="container-lg clearfix">
+            
+            <div class="col-12 col-md-9 float-left content">
+                
+<article>
+    
+    <h2 class="post-item post-title">
+        <a href="https://gruiaaa.github.io/post/%E7%AE%97%E6%B3%95%E7%AC%94%E8%AE%B0/"></a>
+    </h2>
+    <div class="post-item post-meta">
+        <span><i class="iconfont icon-today-sharp"></i>&nbsp;0001-01-01</span>
+
+<span><i class="iconfont icon-file-tray-sharp"></i>&nbsp;1429 words</span>
+
+
+    </div>
+    
+    <div class="post-content markdown-body">
+        <h1 id="第一章-算法概述">第一章 算法概述</h1>
+<h2 id="常见的时间复杂度及其增长速度比较">常见的时间复杂度，及其增长速度比较</h2>
+<p><img class="img-zoomable" src="https://gruia-images-1309786869.cos.ap-chongqing.myqcloud.com/blogImg/image-20230222121316883.png" alt="image-20230222121316883" />
+</p>
+<p>时间复杂度反映的是随着问题规模的变大，计算所需的时间的增长速度，与<strong>系数的多少关系不大</strong></p>
+<h2 id="渐进符号">渐进符号</h2>
+<h3 id="o-大o-渐进上界">O 大O 渐进上界</h3>
+<p>存在两个正常数c和n0，使得当n≥n0时，有f(n)≤cg(n)，则记做f(n) = O(g(n))</p>
+<blockquote>
+<p>示例</p>
+<p>f(n) = 2n + 3 = O(n)</p>
+<p>当n≥3时，2n+3≤3n，</p>
+<p>所以，可选c = 3，n0 = 3。对于n≥n0，f(n) = 2n + 3≤3n，</p>
+<p>所以， f(n) = O(n) 。这意味着，当n≥3时，该程序步不会超过3n。</p>
+</blockquote>
+<p>fn的阶不低于On</p>
+<h3 id="ω-欧米噶-渐近下界">Ω 欧米噶 渐近下界</h3>
+<p>存在两个正常数 c和n0，使得当n≥n0时，有f(n) ≥c g(n)，则记做f(n) = Ω (g(n))</p>
+<p>fn的阶不高于On</p>
+<blockquote>
+<p>例1-5  f(n) = 2n + 3 =Ω(n)</p>
+<p>对所有n，2n+3≥2n，可选c = 2，n0=0。</p>
+<p>对于n≥n0，f(n) = 2n+3≥2n，所以，f(n) = Ω(n)，即2n + 3∈Ω(n)。</p>
+<p>例1-6  f(n) = 10n2 + 4n + 2 = Ω(n2)</p>
+<p>对所有n，10n2 + 4n + 2≥10n2，可选c = 10，n0 = 0。</p>
+<p>对于n≥n0，f(n) = 10n2 + 4n + 2≥10n2，所以，f(n) =Ω(n^2)。</p>
+</blockquote>
+<h3 id="θ-theta紧渐近界">θ Theta紧渐近界</h3>
+<p>存在正常数c1，c2和n0，使得当n≥n0时，有c1 g(n)≤f(n)≤c2 g(n)，则记做f(n) = θ(g(n))</p>
+<p>fn 、On 同阶</p>
+<blockquote>
+<p>例1-7</p>
+<p>f(n) = 2n + 3 = θ(n)</p>
+<p>例1-8</p>
+<p>f(n) = 10n2 + 4n + 2 = θ(n^2)</p>
+</blockquote>
+<h2 id="算法按时间复杂度分类">算法按时间复杂度分类</h2>
+<p>分为</p>
+<ol>
+<li>
+<p>多项式时间算法</p>
+<p><img class="img-zoomable" src="https://gruia-images-1309786869.cos.ap-chongqing.myqcloud.com/blogImg/image-20230222122417541.png" alt="image-20230222122417541" />
+</p>
+</li>
+<li>
+<p>指数时间算法</p>
+<p><img class="img-zoomable" src="https://gruia-images-1309786869.cos.ap-chongqing.myqcloud.com/blogImg/image-20230222122442137.png" alt="image-20230222122442137" />
+</p>
+</li>
+</ol>
+<p>复杂度示意图</p>
+<p><img class="img-zoomable" src="https://gruia-images-1309786869.cos.ap-chongqing.myqcloud.com/blogImg/20190404192343144.png" alt="img" />
+</p>
+<h2 id="常见排序算法时间复杂度">常见排序算法时间复杂度</h2>
+<p>常用的排序算法的时间复杂度和空间复杂度</p>
+<table>
+<thead>
+<tr>
+<th>排序法</th>
+<th>最差时间分析</th>
+<th>平均时间复杂度</th>
+<th>稳定度</th>
+<th>空间复杂度</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>冒泡排序</td>
+<td>O(n2)</td>
+<td>O(n2)</td>
+<td>稳定</td>
+<td>O(1)</td>
+</tr>
+<tr>
+<td>插入排序</td>
+<td>O(n2)</td>
+<td>O(n2)</td>
+<td>稳定</td>
+<td>O(1)</td>
+</tr>
+<tr>
+<td>选择排序</td>
+<td>O(n2)</td>
+<td>O(n2)</td>
+<td>不稳定</td>
+<td>O(1)</td>
+</tr>
+<tr>
+<td>二叉树排序</td>
+<td>O(n2)</td>
+<td>O(n*log2n)</td>
+<td>不一定</td>
+<td>O(n)</td>
+</tr>
+<tr>
+<td>快速排序</td>
+<td>O(n2)</td>
+<td>O(n*log2n)</td>
+<td>不稳定</td>
+<td>O(log2n)~O(n)</td>
+</tr>
+<tr>
+<td>堆排序</td>
+<td>O(n*log2n)</td>
+<td>O(n*log2n)</td>
+<td>不稳定</td>
+<td>O(1)</td>
+</tr>
+<tr>
+<td>希尔排序</td>
+<td>O(n^(1.3-2))</td>
+<td>O(n^(1.3-2))</td>
+<td>不稳定</td>
+<td>O(1)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="常见查找算法时间复杂度">常见查找算法时间复杂度</h2>
+<table>
+<thead>
+<tr>
+<th>查找</th>
+<th>查找条件</th>
+<th>平均时间复杂度</th>
+<th>算法描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>顺序查找</td>
+<td>无序或有序队列</td>
+<td>O(n)</td>
+<td>按顺序比较每个元素，直到找到关键字为止</td>
+</tr>
+<tr>
+<td>二分查找（折半查找）</td>
+<td>有序数组</td>
+<td>O(logn)</td>
+<td>查找过程从数组的中间元素开始，如果中间元素正好是要查找的元素，则搜素过程结束；如果某一特定元素大于或者小于中间元素，则在数组大于或小于中间元素的那一半中查找，而且跟开始一样从中间元素开始比较。　如果在某一步骤数组为空，则代表找不到。</td>
+</tr>
+<tr>
+<td>二叉排序树查找</td>
+<td>二叉排序树</td>
+<td>O(logn)</td>
+<td>在二叉查找树b中查找x的过程为：1. 若b是空树，则搜索失败2. 若x等于b的根节点的数据域之值，则查找成功；3. 若x小于b的根节点的数据域之值，则搜索左子树4. 查找右子树。</td>
+</tr>
+<tr>
+<td>哈希表法（散列表）</td>
+<td>先创建哈希表（散列表）</td>
+<td>O(1)</td>
+<td>根据键值方式(Key value)进行查找，通过散列函数，定位数据元素。</td>
+</tr>
+<tr>
+<td>分块查找</td>
+<td>无序或有序队列</td>
+<td>O(logn)</td>
+<td>将n个数据元素&quot;按块有序&quot;划分为m块（m ≤ n）。每一块中的结点不必有序，但块与块之间必须&quot;按块有序&quot;；即第1块中任一元素的关键字都必须小于第2块中任一元素的关键字；而第2块中任一元素又都必须小于第3块中的任一元素，……。然后使用二分查找及顺序查找。</td>
+</tr>
+</tbody>
+</table>
+<h2 id="p类与np类">P类与NP类</h2>
+<p>通常将可在多项式时间内解决的问题看作“易”解决的问题，将再指数函数时间解决的问题看作“难”的问题。</p>
+<p>不是所有的问题都可以在多项式时间内求解。</p>
+<p>所有可以在多项式时间内求解的判定问题构成P类问题（Polynomial Problem，多项式问题）。</p>
+<p>P类问题是确定性模型下的易解问题类。</p>
+<p>NP类问题是非确定性计算模型下的易验证问题类</p>
+<table>
+<thead>
+<tr>
+<th>参考1</th>
+<th><img class="img-zoomable" src="https://gruia-images-1309786869.cos.ap-chongqing.myqcloud.com/blogImg/image-20230222124401151.png" alt="image-20230222124401151" />
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>参考2</td>
+<td><a href="https://zhuanlan.zhihu.com/p/73953567" target="_blank">P问题、NP问题、NP完全问题和NP难问题 - 知乎 (zhihu.com)</a></td>
+</tr>
+<tr>
+<td>参考3</td>
+<td><a href="https://www.cnblogs.com/jiading/p/11552841.html" target="_blank">简析P和NP问题的概念 - 别再闹了 - 博客园 (cnblogs.com)</a></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h1 id="第二章-递归与分治策略">第二章 递归与分治策略</h1>
+
+    </div>
+</article>
+
+
+
+
+
+            </div>
+            <aside class="col-12 col-md-3 float-left sidebar">
+    
+    <div class="sidebar-item sidebar-pages">
+        <h3>Pages</h3>
+        <ul>
+            
+            <li>
+                <a href="/">Home</a>
+            </li>
+            
+            <li>
+                <a href="/search/">Search</a>
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div class="sidebar-item sidebar-links">
+        <h3>Links</h3>
+        <ul>
+            
+            <li>
+                <a href="https://github.com/gruiaaa" target="_blank"><span>GitHub</span></a>
+            </li>
+            
+            <li>
+                <a href="https://gitee.com/Gruia/" target="_blank"><span>Gtiee</span></a>
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div class="sidebar-item sidebar-tags">
+        <h3>Tags</h3>
+        <div>
+            
+        </div>
+    </div>
+    <div class="sidebar-item sidebar-toc">
+        <h3>Table of Contents</h3><nav id="TableOfContents">
+  <ul>
+    <li><a href="#常见的时间复杂度及其增长速度比较">常见的时间复杂度，及其增长速度比较</a></li>
+    <li><a href="#渐进符号">渐进符号</a>
+      <ul>
+        <li><a href="#o-大o-渐进上界">O 大O 渐进上界</a></li>
+        <li><a href="#ω-欧米噶-渐近下界">Ω 欧米噶 渐近下界</a></li>
+        <li><a href="#θ-theta紧渐近界">θ Theta紧渐近界</a></li>
+      </ul>
+    </li>
+    <li><a href="#算法按时间复杂度分类">算法按时间复杂度分类</a></li>
+    <li><a href="#常见排序算法时间复杂度">常见排序算法时间复杂度</a></li>
+    <li><a href="#常见查找算法时间复杂度">常见查找算法时间复杂度</a></li>
+    <li><a href="#p类与np类">P类与NP类</a></li>
+  </ul>
+</nav></div>
+</aside>
+
+        </div>
+        <div class="btn">
+    <div class="btn-menu" id="btn-menu">
+        <i class="iconfont icon-grid-sharp"></i>
+    </div>
+    <div class="btn-toggle-mode">
+        <i class="iconfont icon-contrast-sharp"></i>
+    </div>
+    <div class="btn-scroll-top">
+        <i class="iconfont icon-chevron-up-circle-sharp"></i>
+    </div>
+</div>
+<aside class="sidebar-mobile" style="display: none;">
+  <div class="sidebar-wrapper">
+    
+    <div class="sidebar-item sidebar-pages">
+        <h3>Pages</h3>
+        <ul>
+            
+            <li>
+                <a href="/">Home</a>
+            </li>
+            
+            <li>
+                <a href="/search/">Search</a>
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div class="sidebar-item sidebar-links">
+        <h3>Links</h3>
+        <ul>
+            
+            <li>
+                <a href="https://github.com/gruiaaa" target="_blank"><span>GitHub</span></a>
+            </li>
+            
+            <li>
+                <a href="https://gitee.com/Gruia/" target="_blank"><span>Gtiee</span></a>
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div class="sidebar-item sidebar-tags">
+        <h3>Tags</h3>
+        <div>
+            
+        </div>
+    </div>
+    
+    
+    
+    <div class="sidebar-item sidebar-toc">
+        <h3>Table of Contents</h3>
+        <nav id="TableOfContents">
+  <ul>
+    <li><a href="#常见的时间复杂度及其增长速度比较">常见的时间复杂度，及其增长速度比较</a></li>
+    <li><a href="#渐进符号">渐进符号</a>
+      <ul>
+        <li><a href="#o-大o-渐进上界">O 大O 渐进上界</a></li>
+        <li><a href="#ω-欧米噶-渐近下界">Ω 欧米噶 渐近下界</a></li>
+        <li><a href="#θ-theta紧渐近界">θ Theta紧渐近界</a></li>
+      </ul>
+    </li>
+    <li><a href="#算法按时间复杂度分类">算法按时间复杂度分类</a></li>
+    <li><a href="#常见排序算法时间复杂度">常见排序算法时间复杂度</a></li>
+    <li><a href="#常见查找算法时间复杂度">常见查找算法时间复杂度</a></li>
+    <li><a href="#p类与np类">P类与NP类</a></li>
+  </ul>
+</nav>
+    </div>
+    
+    
+  </div>
+</aside>
+    </main>
+
+    <footer>
+    <div class="container-lg clearfix">
+        <div class="col-12 footer">
+            - Gruia -
+        </div>
+    </div>
+</footer>
+
+    
+<script defer src="https://cdn.jsdelivr.net/npm/medium-zoom@1.0.6/dist/medium-zoom.min.js" integrity="sha512-N9IJRoc3LaP3NDoiGkcPa4gG94kapGpaA5Zq9/Dr04uf5TbLFU5q0o8AbRhLKUUlp8QFS2u7S+Yti0U7QtuZvQ==" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js" integrity="sha512-q583ppKrCRc7N5O0n2nzUiJ+suUv7Et1JGels4bXOaMFQcamPk9HjdUknZuuFjBNs7tsMuadge5k9RzdmO+1GQ==" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.27.0/components/prism-core.min.js" integrity="sha512-LCKPTo0gtJ74zCNMbWw04ltmujpzSR4oW+fgN+Y1YclhM5ZrHCZQAJE4quEodcI/G122sRhSGU2BsSRUZ2Gu3w==" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.27.0/plugins/autoloader/prism-autoloader.min.js" integrity="sha512-GP4x8UWxWyh4BMbyJGOGneiTbkrWEF5izsVJByzVLodP8CuJH/n936+yQDMJJrOPUHLgyPbLiGw2rXmdvGdXHA==" crossorigin="anonymous"></script>
+
+
+
+<script defer src="/assets/js/fuji.min.645f1123be695831f419ab54c1bcba327325895c740014006e57070d4f3e5d6b553e929c4b46f40ea707249e9c7f7c2a446d32a39ce7319f80a34525586a8e0f.js" integrity="sha512-ZF8RI75pWDH0GatUwby6MnMliVx0ABQAblcHDU8&#43;XWtVPpKcS0b0DqcHJJ6cf3wqRG0yo5znMZ&#43;Ao0UlWGqODw=="></script>
+
+
+
+</body>
+
+</html>
