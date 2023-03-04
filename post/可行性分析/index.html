@@ -1,0 +1,1851 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<meta name="HandheldFriendly" content="True" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta name="generator" content="Hugo 0.109.0">
+
+
+
+<meta name="theme-color" content="#ffffff" />
+
+
+<title>可行性分析 - GRUIA</title>
+
+
+<meta name="author" content="Gruia" />
+
+
+<meta name="description" content="A minimal Hugo theme with nice theme color." />
+
+
+
+<meta property="og:title" content="可行性分析" />
+<meta name="twitter:title" content="可行性分析" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://gruiaaa.github.io/post/%E5%8F%AF%E8%A1%8C%E6%80%A7%E5%88%86%E6%9E%90/" /><meta property="og:description" content="关于使用深度学习提高模型精确率至95% 可行性分析 [toc] 结论：在此数据集(样本正反比例)下不行 结论依据从如下两方面讨论 手动搭建全连接网络与卷积神经网络对比分析 Autogluon框架自动调参结果分析 样本比例对" />
+<meta name="twitter:description" content="关于使用深度学习提高模型精确率至95% 可行性分析 [toc] 结论：在此数据集(样本正反比例)下不行 结论依据从如下两方面讨论 手动搭建全连接网络与卷积神经网络对比分析 Autogluon框架自动调参结果分析 样本比例对" /><meta property="og:image" content="https://gruiaaa.github.io/img/og.png" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="https://gruiaaa.github.io/img/og.png" /><meta property="article:published_time" content="2023-03-04T23:27:00+08:00" /><meta property="article:modified_time" content="2023-03-04T23:27:00+08:00" />
+
+
+<style>
+    @media (prefers-color-scheme: dark) {
+        body[data-theme='auto'] img {
+            filter: brightness(60%);
+        }
+    }
+
+    body[data-theme='dark'] img {
+        filter: brightness(60%);
+    }
+</style>
+
+
+
+
+<link rel="stylesheet" href="https://gruiaaa.github.io/assets/css/fuji.min.cc1b078531f52a14fc2f4bb88d09799de908cb4a586c731716cf9f564e2e5042af9e06235a2d54efdd28c3272c357e62ac2ef87e06a99257b039e6c164914485.css" integrity="sha512-zBsHhTH1KhT8L0u4jQl5nekIy0pYbHMXFs&#43;fVk4uUEKvngYjWi1U790owycsNX5irC74fgapklewOebBZJFEhQ==" />
+
+
+
+
+
+
+
+
+    <link rel="icon" type="image/png" href="https://gruia-images-1309786869.cos.ap-chongqing.myqcloud.com/blogImg/logo.png" />
+</head>
+
+<body
+  data-theme="light"
+  data-theme-auto='false'
+  >
+    <script data-cfasync="false">
+  
+  var fujiThemeData = localStorage.getItem('fuji_data-theme');
+  
+  if (!fujiThemeData) {
+    localStorage.setItem('fuji_data-theme', 'auto');
+  } else {
+    
+    if (fujiThemeData !== 'auto') {
+      document.body.setAttribute('data-theme', fujiThemeData === 'dark' ? 'dark' : 'light');
+    }
+  }
+</script>
+
+    <header>
+    <div class="container-lg clearfix">
+        <div class="col-12 header">
+            <a class="title-main" href="https://gruiaaa.github.io">GRUIA</a>
+            
+            <span class="title-sub">不如烂键盘</span>
+            
+        </div>
+    </div>
+</header>
+
+    <main>
+        <div class="container-lg clearfix">
+            
+            <div class="col-12 col-md-9 float-left content">
+                
+<article>
+    
+    <h2 class="post-item post-title">
+        <a href="https://gruiaaa.github.io/post/%E5%8F%AF%E8%A1%8C%E6%80%A7%E5%88%86%E6%9E%90/">可行性分析</a>
+    </h2>
+    <div class="post-item post-meta">
+        <span><i class="iconfont icon-today-sharp"></i>&nbsp;2023-03-04</span>
+
+<span><i class="iconfont icon-file-tray-sharp"></i>&nbsp;2913 words</span>
+
+
+    </div>
+    
+    <div class="post-content markdown-body">
+        <h1 id="关于使用深度学习提高模型精确率至95-可行性分析">关于使用深度学习提高模型精确率至95% 可行性分析</h1>
+<p>[toc]</p>
+<p>结论：在此数据集(样本正反比例)下不行</p>
+<p>结论依据从如下两方面讨论</p>
+<ol>
+<li>手动搭建全连接网络与卷积神经网络对比分析</li>
+<li>Autogluon框架自动调参结果分析</li>
+<li>样本比例对模型精度影响分析</li>
+</ol>
+<h2 id="手动搭建全连接网络与卷积神经网络对比分析">手动搭建全连接网络与卷积神经网络对比分析</h2>
+<h3 id="全连接网络">全连接网络</h3>
+<p>人工神经网络中的神经元为全连接，是线性的叠加，从理论上来说，达到一定程度后，全连接层数与模型精确度关系不大。进行实验验证，结果确实如此。</p>
+<p><strong>一、两层网络测试结果</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center"><img class="img-zoomable" src="https://gruia-images-1309786869.cos.ap-chongqing.myqcloud.com/blogImg/image-20230304193554602.png" alt="image-20230304193554602" />
+</th>
+<th style="text-align:center"><img class="img-zoomable" src="https://gruia-images-1309786869.cos.ap-chongqing.myqcloud.com/blogImg/image-20230304193653149.png" alt="image-20230304193653149" />
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">两层网络结构</td>
+<td style="text-align:center">模型训练精确率保持不变，为0.86左右</td>
+</tr>
+</tbody>
+</table>
+<p><strong>二、多层网络测试结果</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center"><img class="img-zoomable" src="https://gruia-images-1309786869.cos.ap-chongqing.myqcloud.com/blogImg/image-20230304193909941.png" alt="image-20230304193909941" />
+</th>
+<th style="text-align:center"><img class="img-zoomable" src="https://gruia-images-1309786869.cos.ap-chongqing.myqcloud.com/blogImg/image-20230304194033624.png" alt="image-20230304194033624" />
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">多层网络结构</td>
+<td style="text-align:center">精确率同样保持在0.86附近</td>
+</tr>
+</tbody>
+</table>
+<p>从两个结果对比可知，全连接层数对精确率没有影响。同时从训练过程中的loss值可以看出模型已经<strong>达到了拟合状态，无法提高</strong>。</p>
+<p>尝试用卷积神经网络。</p>
+<h3 id="卷积神经网络分析">卷积神经网络分析</h3>
+<p>由于数据为一维向量，采取CONV1D进行卷积，设计了8层卷积层与2层全连接层。网络结构及实验结果如下。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center"><img class="img-zoomable" src="https://gruia-images-1309786869.cos.ap-chongqing.myqcloud.com/blogImg/image-20230304194949500.png" alt="image-20230304194949500" />
+</th>
+<th style="text-align:center"><img class="img-zoomable" src="https://gruia-images-1309786869.cos.ap-chongqing.myqcloud.com/blogImg/image-20230304195047849.png" alt="image-20230304195047849" />
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">卷积网络结构</td>
+<td style="text-align:center">实验结果显示精确率同样保持在0.86左右</td>
+</tr>
+</tbody>
+</table>
+<p>经过两种网络实验后分析可知，在此数据集下，使用神经网络进行预测精确度只能保持在0.86左右，所以理论上达不到95%的精确率。</p>
+<h2 id="autogluon框架自动调参结果分析">Autogluon框架自动调参结果分析</h2>
+<p>Autogluon是一个自动机器学习的库，可以实现自动调参、模型选择。主要应用场景有</p>
+<ul>
+<li>
+<p>机器学习：实现机器学习中的预测问题；</p>
+</li>
+<li>
+<p>图像分类：识别图像中的主要对象；</p>
+</li>
+<li>
+<p>对象检测：借助图像中的边界框检测多个对象；</p>
+</li>
+<li>
+<p>文本分类：基于文本内容做出预测。</p>
+</li>
+</ul>
+<p>使用此框架对<code>游戏数据最终样本.csv</code>进行分析。代码及运行情况如下。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center"><img class="img-zoomable" src="https://gruia-images-1309786869.cos.ap-chongqing.myqcloud.com/blogImg/image-20230304201127106.png" alt="image-20230304201127106" />
+</th>
+<th style="text-align:center"><img class="img-zoomable" src="https://gruia-images-1309786869.cos.ap-chongqing.myqcloud.com/blogImg/image-20230304201212117.png" alt="image-20230304201212117" />
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">代码</td>
+<td style="text-align:center">运行情况</td>
+</tr>
+</tbody>
+</table>
+<p>结果存为<code>result.txt</code>。结果如下表</p>
+<table>
+<thead>
+<tr>
+<th>index</th>
+<th>model</th>
+<th>score_test</th>
+<th>score_val</th>
+<th><strong>pred_time_test</strong></th>
+<th>pred_time_val</th>
+<th>fit_time</th>
+<th>pred_time_test_marginal</th>
+<th>pred_time_val_marginal</th>
+<th>fit_time_marginal</th>
+<th>stack_level</th>
+<th>can_infer</th>
+<th>fit_order</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>XGBoost</td>
+<td>0.878917</td>
+<td><strong>0.877828</strong></td>
+<td>0.172556</td>
+<td>0.015625</td>
+<td>3.227387</td>
+<td>0.172556</td>
+<td>0.015625</td>
+<td>3.227387</td>
+<td>1</td>
+<td>True</td>
+<td>11</td>
+</tr>
+<tr>
+<td>1</td>
+<td>CatBoost</td>
+<td>0.878668</td>
+<td><strong>0.880737</strong></td>
+<td>0.067747</td>
+<td>0.015619</td>
+<td>10.656250</td>
+<td>0.067747</td>
+<td>0.015619</td>
+<td>10.656250</td>
+<td>1</td>
+<td>True</td>
+<td>7</td>
+</tr>
+<tr>
+<td>2</td>
+<td>LightGBM</td>
+<td>0.878615</td>
+<td><strong>0.877505</strong></td>
+<td>0.185287</td>
+<td>0.015621</td>
+<td>1.499961</td>
+<td>0.185287</td>
+<td>0.015621</td>
+<td>1.499961</td>
+<td>1</td>
+<td>True</td>
+<td>4</td>
+</tr>
+<tr>
+<td>3</td>
+<td>ExtraTreesGini</td>
+<td>0.877778</td>
+<td><strong>0.892372</strong></td>
+<td>2.339057</td>
+<td>0.031242</td>
+<td>10.179940</td>
+<td>2.339057</td>
+<td>0.031242</td>
+<td>10.179940</td>
+<td>1</td>
+<td>True</td>
+<td>8</td>
+</tr>
+<tr>
+<td>4</td>
+<td>ExtraTreesEntr</td>
+<td>0.877770</td>
+<td><strong>0.895281</strong></td>
+<td>2.582575</td>
+<td>0.046864</td>
+<td>12.298146</td>
+<td>2.582575</td>
+<td>0.046864</td>
+<td>12.298146</td>
+<td>1</td>
+<td>True</td>
+<td>9</td>
+</tr>
+<tr>
+<td>5</td>
+<td>RandomForestEntr</td>
+<td>0.877521</td>
+<td><strong>0.928895</strong></td>
+<td>2.755487</td>
+<td>0.046864</td>
+<td>34.587802</td>
+<td>2.755487</td>
+<td>0.046864</td>
+<td>34.587802</td>
+<td>1</td>
+<td>True</td>
+<td>6</td>
+</tr>
+<tr>
+<td>6</td>
+<td>WeightedEnsemble_L2</td>
+<td>0.877476</td>
+<td><strong>0.930511</strong></td>
+<td>5.226238</td>
+<td>0.109824</td>
+<td>59.683161</td>
+<td>0.015620</td>
+<td>0.015586</td>
+<td>1.704907</td>
+<td>2</td>
+<td>True</td>
+<td>14</td>
+</tr>
+<tr>
+<td>7</td>
+<td>RandomForestGini</td>
+<td>0.876443</td>
+<td><strong>0.925986</strong></td>
+<td>2.455130</td>
+<td>0.047374</td>
+<td>23.390453</td>
+<td>2.455130</td>
+<td>0.047374</td>
+<td>23.390453</td>
+<td>1</td>
+<td>True</td>
+<td>5</td>
+</tr>
+<tr>
+<td>8</td>
+<td>NeuralNetFastAI</td>
+<td>0.876390</td>
+<td><strong>0.877828</strong></td>
+<td>1.069277</td>
+<td>0.046863</td>
+<td>210.108015</td>
+<td>1.069277</td>
+<td>0.046863</td>
+<td>210.108015</td>
+<td>1</td>
+<td>True</td>
+<td>10</td>
+</tr>
+<tr>
+<td>9</td>
+<td>NeuralNetTorch</td>
+<td>0.871841</td>
+<td><strong>0.885262</strong></td>
+<td>0.454326</td>
+<td>0.027925</td>
+<td>714.680279</td>
+<td>0.454326</td>
+<td>0.027925</td>
+<td>714.680279</td>
+<td>1</td>
+<td>True</td>
+<td>12</td>
+</tr>
+<tr>
+<td>10</td>
+<td>LightGBMLarge</td>
+<td>0.870355</td>
+<td><strong>0.866839</strong></td>
+<td>0.047337</td>
+<td>0.017444</td>
+<td>0.808270</td>
+<td>0.047337</td>
+<td>0.017444</td>
+<td>0.808270</td>
+<td>1</td>
+<td>True</td>
+<td>13</td>
+</tr>
+<tr>
+<td>11</td>
+<td>LightGBMXT</td>
+<td>0.870355</td>
+<td><strong>0.866839</strong></td>
+<td>0.140592</td>
+<td>0.000000</td>
+<td>1.562100</td>
+<td>0.140592</td>
+<td>0.000000</td>
+<td>1.562100</td>
+<td>1</td>
+<td>True</td>
+<td>3</td>
+</tr>
+<tr>
+<td>12</td>
+<td>KNeighborsUnif</td>
+<td>0.841457</td>
+<td><strong>0.850679</strong></td>
+<td>2.043974</td>
+<td>0.078107</td>
+<td>4.479971</td>
+<td>2.043974</td>
+<td>0.078107</td>
+<td>4.479971</td>
+<td>1</td>
+<td>True</td>
+<td>1</td>
+</tr>
+<tr>
+<td>13</td>
+<td>KNeighborsDist</td>
+<td>0.825307</td>
+<td><strong>0.855850</strong></td>
+<td>2.058742</td>
+<td>0.046836</td>
+<td>1.718632</td>
+<td>2.058742</td>
+<td>0.046836</td>
+<td>1.718632</td>
+<td>1</td>
+<td>True</td>
+<td>2</td>
+</tr>
+</tbody>
+</table>
+<p>表中加粗列为验证集精确率，可知精确率在90%以上的共有三个模型，分别为<code>RandomForestEntr</code>、<code>WeightedEnsemble_L2</code>、<code>RandomForestGini</code>,精确率在93%附件，三者精确率都没有超过95%。</p>
+<p>其中两个神经网络及其精确率为 <code>NeuralNetFastAI - 0.877828</code>，<code>NeuralNetTorch - 0.885262 </code>,与手动搭建神经网络结果相差不大。</p>
+<h2 id="结果分析">结果分析</h2>
+<p>通过两方面对比分析，在此数据集上，使用深度学习构建神经网络来做二分类预测的效果并不最佳，随机森林效果更好，使用神经网络并不能提升模型精确率至95%以上。</p>
+<h2 id="样本比例对模型精度影响分析">样本比例对模型精度影响分析</h2>
+<p>在进行分析时，统计发现样本比例不均，比例约为1：6，情况如下。</p>
+<p><img class="img-zoomable" src="https://gruia-images-1309786869.cos.ap-chongqing.myqcloud.com/blogImg/image-20230304204818979.png" alt="image-20230304204818979" />
+</p>
+<p>考虑到样本比例不均是否会对模型精确度造成影响，于是选择部分数据进行分析。</p>
+<h3 id="方式1-比例变且样本量变">方式1 比例变且样本量变</h3>
+<p>调整样本数量为25W，其中正例58k，比例约为1：4，运行情况如下图左</p>
+<p>调整样本数量为30W，其中正例58k，比例约为1：5，运行情况如下图右</p>
+<table>
+<thead>
+<tr>
+<th><img class="img-zoomable" src="https://gruia-images-1309786869.cos.ap-chongqing.myqcloud.com/blogImg/image-20230304205453500.png" alt="image-20230304205453500" />
+</th>
+<th><img class="img-zoomable" src="https://gruia-images-1309786869.cos.ap-chongqing.myqcloud.com/blogImg/image-20230304205506013.png" alt="image-20230304205506013" />
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Total：25W    Ratio：1：4    Accuracy：0.76</td>
+<td>Total：30W    Ratio：1：5   Accuracy：0.80</td>
+</tr>
+</tbody>
+</table>
+<p>此对比说明<strong>样本数量对模型精确度仍有影响</strong>，所以合理推测，使神经网络模型精确率在90%以下的原因之一是样本数据量不够。</p>
+<h3 id="方式2-比例变但样本量不变">方式2 比例变但样本量不变</h3>
+<p>实验结果有点意外，结果全连接层构成的神经网络在精度上与样本比例有关，结果如下</p>
+<table>
+<thead>
+<tr>
+<th>运行结果截图</th>
+<th>样本量、比率、精确率</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><img class="img-zoomable" src="https://gruia-images-1309786869.cos.ap-chongqing.myqcloud.com/blogImg/image-20230304220137222.png" alt="image-20230304220137222" />
+</td>
+<td>Total:100000 <br />Ratio: 1:1 <br />Accuracy: 0.49</td>
+</tr>
+<tr>
+<td><img class="img-zoomable" src="https://gruia-images-1309786869.cos.ap-chongqing.myqcloud.com/blogImg/image-20230304220358365.png" alt="image-20230304220358365" />
+</td>
+<td>Total:200000 <br />Ratio: 1:5 <br />Accuracy: 0.83</td>
+</tr>
+<tr>
+<td><img class="img-zoomable" src="https://gruia-images-1309786869.cos.ap-chongqing.myqcloud.com/blogImg/image-20230304220830303.png" alt="image-20230304220830303" />
+</td>
+<td>Total:200000 <br />Ratio: 1:10 <br />Accuracy: 0.90</td>
+</tr>
+<tr>
+<td><img class="img-zoomable" src="https://gruia-images-1309786869.cos.ap-chongqing.myqcloud.com/blogImg/image-20230304220855885.png" alt="image-20230304220855885" />
+</td>
+<td>Total:200000 <br />Ratio: 1:15 <br />Accuracy: 0.93</td>
+</tr>
+</tbody>
+</table>
+<p>从结果分析，样本比率对全连接神经网络的精确率影响较大。</p>
+<p>当比例达到1：20时，精确率可达95%。考虑此种情况出现原因为比例过于不协调导致训练测试过拟合。</p>
+<p>思考可能原因是自己手动搭建的模型不合理，于是使用Autoloun 对不同比例进行测试。</p>
+<p>固定样本数量为20W，比例为1:50时，结果如下表</p>
+<table>
+<thead>
+<tr>
+<th>index</th>
+<th>model</th>
+<th>score_test</th>
+<th>score_val</th>
+<th><strong>pred_time_test</strong></th>
+<th>pred_time_val</th>
+<th>fit_time</th>
+<th>pred_time_test_marginal</th>
+<th>pred_time_val_marginal</th>
+<th>fit_time_marginal</th>
+<th>stack_level</th>
+<th>can_infer</th>
+<th>fit_order</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>LightGBM</td>
+<td>1.000000</td>
+<td><strong>0.972011</strong></td>
+<td>0.015057</td>
+<td>0.006982</td>
+<td>0.392086</td>
+<td>0.015057</td>
+<td>0.006982</td>
+<td>0.392086</td>
+<td>1</td>
+<td>True</td>
+<td>4</td>
+</tr>
+<tr>
+<td>1</td>
+<td>LightGBMXT</td>
+<td>1.000000</td>
+<td><strong>0.972011</strong></td>
+<td>0.017099</td>
+<td>0.006028</td>
+<td>1.578239</td>
+<td>0.017099</td>
+<td>0.006028</td>
+<td>1.578239</td>
+<td>1</td>
+<td>True</td>
+<td>3</td>
+</tr>
+<tr>
+<td>2</td>
+<td>LightGBMLarge</td>
+<td>1.000000</td>
+<td><strong>0.972011</strong></td>
+<td>0.029131</td>
+<td>0.005984</td>
+<td>0.539557</td>
+<td>0.029131</td>
+<td>0.005984</td>
+<td>0.539557</td>
+<td>1</td>
+<td>True</td>
+<td>13</td>
+</tr>
+<tr>
+<td>3</td>
+<td>CatBoost</td>
+<td>1.000000</td>
+<td><strong>0.972011</strong></td>
+<td>0.062832</td>
+<td>0.012073</td>
+<td>6.339178</td>
+<td>0.062832</td>
+<td>0.012073</td>
+<td>6.339178</td>
+<td>1</td>
+<td>True</td>
+<td>7</td>
+</tr>
+<tr>
+<td>4</td>
+<td>NeuralNetTorch</td>
+<td>1.000000</td>
+<td><strong>0.972011</strong></td>
+<td>0.228472</td>
+<td>0.021114</td>
+<td>55.337163</td>
+<td>0.228472</td>
+<td>0.021114</td>
+<td>55.337163</td>
+<td>1</td>
+<td>True</td>
+<td>12</td>
+</tr>
+<tr>
+<td>5</td>
+<td>NeuralNetFastAI</td>
+<td>1.000000</td>
+<td><strong>0.972011</strong></td>
+<td>1.069749</td>
+<td>0.206472</td>
+<td>118.090308</td>
+<td>1.069749</td>
+<td>0.206472</td>
+<td>118.090308</td>
+<td>1</td>
+<td>True</td>
+<td>10</td>
+</tr>
+<tr>
+<td>6</td>
+<td>ExtraTreesGini</td>
+<td>0.999817</td>
+<td><strong>0.973611</strong></td>
+<td>1.634300</td>
+<td>0.056363</td>
+<td>5.724418</td>
+<td>1.634300</td>
+<td>0.056363</td>
+<td>5.724418</td>
+<td>1</td>
+<td>True</td>
+<td>8</td>
+</tr>
+<tr>
+<td>7</td>
+<td>ExtraTreesEntr</td>
+<td>0.999783</td>
+<td><strong>0.974010</strong></td>
+<td>1.750266</td>
+<td>0.058498</td>
+<td>6.254190</td>
+<td>1.750266</td>
+<td>0.058498</td>
+<td>6.254190</td>
+<td>1</td>
+<td>True</td>
+<td>9</td>
+</tr>
+<tr>
+<td>8</td>
+<td>RandomForestEntr</td>
+<td>0.999783</td>
+<td><strong>0.973611</strong></td>
+<td>2.301649</td>
+<td>0.090802</td>
+<td>36.538411</td>
+<td>2.301649</td>
+<td>0.090802</td>
+<td>36.538411</td>
+<td>1</td>
+<td>True</td>
+<td>6</td>
+</tr>
+<tr>
+<td>9</td>
+<td>RandomForestGini</td>
+<td>0.999783</td>
+<td><strong>0.974010</strong></td>
+<td>2.994298</td>
+<td>0.104868</td>
+<td>47.326895</td>
+<td>2.994298</td>
+<td>0.104868</td>
+<td>47.326895</td>
+<td>1</td>
+<td>True</td>
+<td>5</td>
+</tr>
+<tr>
+<td>10</td>
+<td>WeightedEnsemble_L2</td>
+<td>0.999783</td>
+<td><strong>0.974010</strong></td>
+<td>3.001316</td>
+<td>0.109909</td>
+<td>48.754825</td>
+<td>0.007018</td>
+<td>0.005041</td>
+<td>1.427929</td>
+<td>2</td>
+<td>True</td>
+<td>14</td>
+</tr>
+<tr>
+<td>11</td>
+<td>XGBoost</td>
+<td>0.999717</td>
+<td><strong>0.972811</strong></td>
+<td>0.118953</td>
+<td>0.022081</td>
+<td>1.722954</td>
+<td>0.118953</td>
+<td>0.022081</td>
+<td>1.722954</td>
+<td>1</td>
+<td>True</td>
+<td>11</td>
+</tr>
+<tr>
+<td>12</td>
+<td>KNeighborsUnif</td>
+<td>0.999000</td>
+<td><strong>0.971212</strong></td>
+<td>0.932512</td>
+<td>0.061589</td>
+<td>5.656096</td>
+<td>0.932512</td>
+<td>0.061589</td>
+<td>5.656096</td>
+<td>1</td>
+<td>True</td>
+<td>1</td>
+</tr>
+<tr>
+<td>13</td>
+<td>KNeighborsDist</td>
+<td>0.994417</td>
+<td><strong>0.966413</strong></td>
+<td>0.637997</td>
+<td>0.059638</td>
+<td>0.835501</td>
+<td>0.637997</td>
+<td>0.059638</td>
+<td>0.835501</td>
+<td>1</td>
+<td>True</td>
+<td>2</td>
+</tr>
+</tbody>
+</table>
+<p>固定样本数量为20W，比例为1:10时，结果如下表</p>
+<table>
+<thead>
+<tr>
+<th>index</th>
+<th>model</th>
+<th>score_test</th>
+<th>score_val</th>
+<th><strong>pred_time_test</strong></th>
+<th>pred_time_val</th>
+<th>fit_time</th>
+<th>pred_time_test_marginal</th>
+<th>pred_time_val_marginal</th>
+<th>fit_time_marginal</th>
+<th>stack_level</th>
+<th>can_infer</th>
+<th>fit_order</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>LightGBMLarge</td>
+<td>1.000000</td>
+<td><strong>0.870052</strong></td>
+<td>0.017952</td>
+<td>0.005975</td>
+<td>0.684027</td>
+<td>0.017952</td>
+<td>0.005975</td>
+<td>0.684027</td>
+<td>1</td>
+<td>True</td>
+<td>13</td>
+</tr>
+<tr>
+<td>1</td>
+<td>LightGBMXT</td>
+<td>1.000000</td>
+<td><strong>0.870052</strong></td>
+<td>0.041129</td>
+<td>0.006102</td>
+<td>1.060362</td>
+<td>0.041129</td>
+<td>0.006102</td>
+<td>1.060362</td>
+<td>1</td>
+<td>True</td>
+<td>3</td>
+</tr>
+<tr>
+<td>2</td>
+<td>NeuralNetFastAI</td>
+<td>0.993217</td>
+<td><strong>0.878848</strong></td>
+<td>1.309562</td>
+<td>0.278254</td>
+<td>186.526137</td>
+<td>1.309562</td>
+<td>0.278254</td>
+<td>186.526137</td>
+<td>1</td>
+<td>True</td>
+<td>10</td>
+</tr>
+<tr>
+<td>3</td>
+<td>NeuralNetTorch</td>
+<td>0.983817</td>
+<td><strong>0.882447</strong></td>
+<td>0.262298</td>
+<td>0.023937</td>
+<td>218.103173</td>
+<td>0.262298</td>
+<td>0.023937</td>
+<td>218.103173</td>
+<td>1</td>
+<td>True</td>
+<td>12</td>
+</tr>
+<tr>
+<td>4</td>
+<td>XGBoost</td>
+<td>0.982617</td>
+<td><strong>0.881647</strong></td>
+<td>0.108709</td>
+<td>0.024933</td>
+<td>2.098191</td>
+<td>0.108709</td>
+<td>0.024933</td>
+<td>2.098191</td>
+<td>1</td>
+<td>True</td>
+<td>11</td>
+</tr>
+<tr>
+<td>5</td>
+<td>LightGBM</td>
+<td>0.982283</td>
+<td><strong>0.880448</strong></td>
+<td>0.189728</td>
+<td>0.011000</td>
+<td>1.127144</td>
+<td>0.189728</td>
+<td>0.011000</td>
+<td>1.127144</td>
+<td>1</td>
+<td>True</td>
+<td>4</td>
+</tr>
+<tr>
+<td>6</td>
+<td>ExtraTreesEntr</td>
+<td>0.981550</td>
+<td><strong>0.893243</strong></td>
+<td>2.669475</td>
+<td>0.078789</td>
+<td>5.102355</td>
+<td>2.669475</td>
+<td>0.078789</td>
+<td>5.102355</td>
+<td>1</td>
+<td>True</td>
+<td>9</td>
+</tr>
+<tr>
+<td>7</td>
+<td>CatBoost</td>
+<td>0.979800</td>
+<td><strong>0.878449</strong></td>
+<td>0.107712</td>
+<td>0.005984</td>
+<td>4.745862</td>
+<td>0.107712</td>
+<td>0.005984</td>
+<td>4.745862</td>
+<td>1</td>
+<td>True</td>
+<td>7</td>
+</tr>
+<tr>
+<td>8</td>
+<td>ExtraTreesGini</td>
+<td>0.979467</td>
+<td><strong>0.892443</strong></td>
+<td>2.306153</td>
+<td>0.038895</td>
+<td>4.267919</td>
+<td>2.306153</td>
+<td>0.038895</td>
+<td>4.267919</td>
+<td>1</td>
+<td>True</td>
+<td>8</td>
+</tr>
+<tr>
+<td>9</td>
+<td>RandomForestEntr</td>
+<td>0.979250</td>
+<td><strong>0.908836</strong></td>
+<td>2.660665</td>
+<td>0.054853</td>
+<td>22.674685</td>
+<td>2.660665</td>
+<td>0.054853</td>
+<td>22.674685</td>
+<td>1</td>
+<td>True</td>
+<td>6</td>
+</tr>
+<tr>
+<td>10</td>
+<td>WeightedEnsemble_L2</td>
+<td>0.978783</td>
+<td><strong>0.911236</strong></td>
+<td>5.604127</td>
+<td>0.121389</td>
+<td>48.126948</td>
+<td>0.021942</td>
+<td>0.004987</td>
+<td>1.584814</td>
+<td>2</td>
+<td>True</td>
+<td>14</td>
+</tr>
+<tr>
+<td>11</td>
+<td>RandomForestGini</td>
+<td>0.977450</td>
+<td><strong>0.905638</strong></td>
+<td>2.813807</td>
+<td>0.055566</td>
+<td>19.121587</td>
+<td>2.813807</td>
+<td>0.055566</td>
+<td>19.121587</td>
+<td>1</td>
+<td>True</td>
+<td>5</td>
+</tr>
+<tr>
+<td>12</td>
+<td>KNeighborsUnif</td>
+<td>0.971167</td>
+<td><strong>0.854458</strong></td>
+<td>1.097421</td>
+<td>0.051967</td>
+<td>4.141845</td>
+<td>1.097421</td>
+<td>0.051967</td>
+<td>4.141845</td>
+<td>1</td>
+<td>True</td>
+<td>1</td>
+</tr>
+<tr>
+<td>13</td>
+<td>KNeighborsDist</td>
+<td>0.948333</td>
+<td><strong>0.858057</strong></td>
+<td>0.907242</td>
+<td>0.031711</td>
+<td>0.695398</td>
+<td>0.907242</td>
+<td>0.031711</td>
+<td>0.695398</td>
+<td>1</td>
+<td>True</td>
+<td>2</td>
+</tr>
+</tbody>
+</table>
+<p>固定样本数量为20W，比例为1:20时，结果如下表</p>
+<table>
+<thead>
+<tr>
+<th>index</th>
+<th>model</th>
+<th>score_test</th>
+<th>score_val</th>
+<th><strong>pred_time_test</strong></th>
+<th>pred_time_val</th>
+<th>fit_time</th>
+<th>pred_time_test_marginal</th>
+<th>pred_time_val_marginal</th>
+<th>fit_time_marginal</th>
+<th>stack_level</th>
+<th>can_infer</th>
+<th>fit_order</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>LightGBM</td>
+<td>1.000000</td>
+<td><strong>0.932027</strong></td>
+<td>0.047871</td>
+<td>0.006981</td>
+<td>0.500660</td>
+<td>0.047871</td>
+<td>0.006981</td>
+<td>0.500660</td>
+<td>1</td>
+<td>True</td>
+<td>4</td>
+</tr>
+<tr>
+<td>1</td>
+<td>LightGBMXT</td>
+<td>1.000000</td>
+<td><strong>0.932027</strong></td>
+<td>0.058845</td>
+<td>0.006981</td>
+<td>1.115775</td>
+<td>0.058845</td>
+<td>0.006981</td>
+<td>1.115775</td>
+<td>1</td>
+<td>True</td>
+<td>3</td>
+</tr>
+<tr>
+<td>2</td>
+<td>LightGBMLarge</td>
+<td>1.000000</td>
+<td><strong>0.932027</strong></td>
+<td>0.186760</td>
+<td>0.007979</td>
+<td>0.722069</td>
+<td>0.186760</td>
+<td>0.007979</td>
+<td>0.722069</td>
+<td>1</td>
+<td>True</td>
+<td>13</td>
+</tr>
+<tr>
+<td>3</td>
+<td>CatBoost</td>
+<td>1.000000</td>
+<td><strong>0.932027</strong></td>
+<td>0.516031</td>
+<td>0.018466</td>
+<td>6.661329</td>
+<td>0.516031</td>
+<td>0.018466</td>
+<td>6.661329</td>
+<td>1</td>
+<td>True</td>
+<td>7</td>
+</tr>
+<tr>
+<td>4</td>
+<td>XGBoost</td>
+<td>0.998950</td>
+<td><strong>0.934426</strong></td>
+<td>0.357095</td>
+<td>0.029920</td>
+<td>2.227147</td>
+<td>0.357095</td>
+<td>0.029920</td>
+<td>2.227147</td>
+<td>1</td>
+<td>True</td>
+<td>11</td>
+</tr>
+<tr>
+<td>5</td>
+<td>NeuralNetTorch</td>
+<td>0.997450</td>
+<td><strong>0.935226</strong></td>
+<td>0.512716</td>
+<td>0.024933</td>
+<td>232.269407</td>
+<td>0.512716</td>
+<td>0.024933</td>
+<td>232.269407</td>
+<td>1</td>
+<td>True</td>
+<td>12</td>
+</tr>
+<tr>
+<td>6</td>
+<td>ExtraTreesEntr</td>
+<td>0.995983</td>
+<td><strong>0.934826</strong></td>
+<td>2.193199</td>
+<td>0.034345</td>
+<td>4.701628</td>
+<td>2.193199</td>
+<td>0.034345</td>
+<td>4.701628</td>
+<td>1</td>
+<td>True</td>
+<td>9</td>
+</tr>
+<tr>
+<td>7</td>
+<td>RandomForestGini</td>
+<td>0.995917</td>
+<td><strong>0.938425</strong></td>
+<td>2.768432</td>
+<td>0.061291</td>
+<td>30.934240</td>
+<td>2.768432</td>
+<td>0.061291</td>
+<td>30.934240</td>
+<td>1</td>
+<td>True</td>
+<td>5</td>
+</tr>
+<tr>
+<td>8</td>
+<td>WeightedEnsemble_L2</td>
+<td>0.995850</td>
+<td><strong>0.939624</strong></td>
+<td>7.259789</td>
+<td>0.099869</td>
+<td>42.106585</td>
+<td>0.063156</td>
+<td>0.007063</td>
+<td>4.319468</td>
+<td>2</td>
+<td>True</td>
+<td>14</td>
+</tr>
+<tr>
+<td>9</td>
+<td>ExtraTreesGini</td>
+<td>0.995833</td>
+<td><strong>0.935226</strong></td>
+<td>2.036377</td>
+<td>0.035958</td>
+<td>4.902179</td>
+<td>2.036377</td>
+<td>0.035958</td>
+<td>4.902179</td>
+<td>1</td>
+<td>True</td>
+<td>8</td>
+</tr>
+<tr>
+<td>10</td>
+<td>RandomForestEntr</td>
+<td>0.995700</td>
+<td><strong>0.939224</strong></td>
+<td>5.160256</td>
+<td>0.056848</td>
+<td>32.884938</td>
+<td>5.160256</td>
+<td>0.056848</td>
+<td>32.884938</td>
+<td>1</td>
+<td>True</td>
+<td>6</td>
+</tr>
+<tr>
+<td>11</td>
+<td>NeuralNetFastAI</td>
+<td>0.995450</td>
+<td><strong>0.933227</strong></td>
+<td>2.326203</td>
+<td>0.145610</td>
+<td>125.404017</td>
+<td>2.326203</td>
+<td>0.145610</td>
+<td>125.404017</td>
+<td>1</td>
+<td>True</td>
+<td>10</td>
+</tr>
+<tr>
+<td>12</td>
+<td>KNeighborsUnif</td>
+<td>0.993500</td>
+<td><strong>0.926429</strong></td>
+<td>1.109035</td>
+<td>0.062525</td>
+<td>4.202966</td>
+<td>1.109035</td>
+<td>0.062525</td>
+<td>4.202966</td>
+<td>1</td>
+<td>True</td>
+<td>1</td>
+</tr>
+<tr>
+<td>13</td>
+<td>KNeighborsDist</td>
+<td>0.981233</td>
+<td><strong>0.919632</strong></td>
+<td>1.148926</td>
+<td>0.045874</td>
+<td>0.774013</td>
+<td>1.148926</td>
+<td>0.045874</td>
+<td>0.774013</td>
+<td>1</td>
+<td>True</td>
+<td>2</td>
+</tr>
+</tbody>
+</table>
+<p>固定样本数量为40W，比例为1:20时，结果如下表</p>
+<table>
+<thead>
+<tr>
+<th>index</th>
+<th>model</th>
+<th>score_test</th>
+<th>score_val</th>
+<th><strong>pred_time_test</strong></th>
+<th>pred_time_val</th>
+<th>fit_time</th>
+<th>pred_time_test_marginal</th>
+<th>pred_time_val_marginal</th>
+<th>fit_time_marginal</th>
+<th>stack_level</th>
+<th>can_infer</th>
+<th>fit_order</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>LightGBMLarge</td>
+<td>1.000000</td>
+<td><strong>0.932143</strong></td>
+<td>0.180578</td>
+<td>0.009974</td>
+<td>0.957314</td>
+<td>0.180578</td>
+<td>0.009974</td>
+<td>0.957314</td>
+<td>1</td>
+<td>True</td>
+<td>13</td>
+</tr>
+<tr>
+<td>1</td>
+<td>LightGBMXT</td>
+<td>1.000000</td>
+<td><strong>0.932143</strong></td>
+<td>0.189680</td>
+<td>0.006024</td>
+<td>1.684334</td>
+<td>0.189680</td>
+<td>0.006024</td>
+<td>1.684334</td>
+<td>1</td>
+<td>True</td>
+<td>3</td>
+</tr>
+<tr>
+<td>2</td>
+<td>LightGBM</td>
+<td>1.000000</td>
+<td><strong>0.932143</strong></td>
+<td>0.208429</td>
+<td>0.006981</td>
+<td>0.767455</td>
+<td>0.208429</td>
+<td>0.006981</td>
+<td>0.767455</td>
+<td>1</td>
+<td>True</td>
+<td>4</td>
+</tr>
+<tr>
+<td>3</td>
+<td>CatBoost</td>
+<td>0.999983</td>
+<td><strong>0.932143</strong></td>
+<td>0.214847</td>
+<td>0.010021</td>
+<td>6.541359</td>
+<td>0.214847</td>
+<td>0.010021</td>
+<td>6.541359</td>
+<td>1</td>
+<td>True</td>
+<td>7</td>
+</tr>
+<tr>
+<td>4</td>
+<td>NeuralNetFastAI</td>
+<td>0.999133</td>
+<td><strong>0.933214</strong></td>
+<td>1.084537</td>
+<td>0.160347</td>
+<td>201.239708</td>
+<td>1.084537</td>
+<td>0.160347</td>
+<td>201.239708</td>
+<td>1</td>
+<td>True</td>
+<td>10</td>
+</tr>
+<tr>
+<td>5</td>
+<td>ExtraTreesEntr</td>
+<td>0.999058</td>
+<td><strong>0.937143</strong></td>
+<td>2.776712</td>
+<td>0.048870</td>
+<td>12.369458</td>
+<td>2.776712</td>
+<td>0.048870</td>
+<td>12.369458</td>
+<td>1</td>
+<td>True</td>
+<td>9</td>
+</tr>
+<tr>
+<td>6</td>
+<td>NeuralNetTorch</td>
+<td>0.998733</td>
+<td><strong>0.933571</strong></td>
+<td>0.483066</td>
+<td>0.026928</td>
+<td>299.167305</td>
+<td>0.483066</td>
+<td>0.026928</td>
+<td>299.167305</td>
+<td>1</td>
+<td>True</td>
+<td>12</td>
+</tr>
+<tr>
+<td>7</td>
+<td>XGBoost</td>
+<td>0.998483</td>
+<td><strong>0.933571</strong></td>
+<td>0.158724</td>
+<td>0.011024</td>
+<td>2.725587</td>
+<td>0.158724</td>
+<td>0.011024</td>
+<td>2.725587</td>
+<td>1</td>
+<td>True</td>
+<td>11</td>
+</tr>
+<tr>
+<td>8</td>
+<td>ExtraTreesGini</td>
+<td>0.998158</td>
+<td><strong>0.934286</strong></td>
+<td>2.386469</td>
+<td>0.082176</td>
+<td>9.599849</td>
+<td>2.386469</td>
+<td>0.082176</td>
+<td>9.599849</td>
+<td>1</td>
+<td>True</td>
+<td>8</td>
+</tr>
+<tr>
+<td>9</td>
+<td>RandomForestEntr</td>
+<td>0.995817</td>
+<td><strong>0.945714</strong></td>
+<td>3.373599</td>
+<td>0.047966</td>
+<td>41.806864</td>
+<td>3.373599</td>
+<td>0.047966</td>
+<td>41.806864</td>
+<td>1</td>
+<td>True</td>
+<td>6</td>
+</tr>
+<tr>
+<td>10</td>
+<td>WeightedEnsemble_L2</td>
+<td>0.995683</td>
+<td><strong>0.946429</strong></td>
+<td>6.271379</td>
+<td>0.103337</td>
+<td>81.883340</td>
+<td>0.003990</td>
+<td>0.006025</td>
+<td>1.588467</td>
+<td>2</td>
+<td>True</td>
+<td>14</td>
+</tr>
+<tr>
+<td>11</td>
+<td>RandomForestGini</td>
+<td>0.995375</td>
+<td><strong>0.943929</strong></td>
+<td>2.893790</td>
+<td>0.049345</td>
+<td>38.488010</td>
+<td>2.893790</td>
+<td>0.049345</td>
+<td>38.488010</td>
+<td>1</td>
+<td>True</td>
+<td>5</td>
+</tr>
+<tr>
+<td>12</td>
+<td>KNeighborsUnif</td>
+<td>0.992700</td>
+<td><strong>0.928929</strong></td>
+<td>2.076654</td>
+<td>0.086878</td>
+<td>7.806824</td>
+<td>2.076654</td>
+<td>0.086878</td>
+<td>7.806824</td>
+<td>1</td>
+<td>True</td>
+<td>1</td>
+</tr>
+<tr>
+<td>13</td>
+<td>KNeighborsDist</td>
+<td>0.983300</td>
+<td><strong>0.925357</strong></td>
+<td>2.044742</td>
+<td>0.036018</td>
+<td>1.930425</td>
+<td>2.044742</td>
+<td>0.036018</td>
+<td>1.930425</td>
+<td>1</td>
+<td>True</td>
+<td>2</td>
+</tr>
+</tbody>
+</table>
+<p>固定样本数量为5W，比例为1:20时，结果如下表</p>
+<table>
+<thead>
+<tr>
+<th>index</th>
+<th>model</th>
+<th>score_test</th>
+<th>score_val</th>
+<th><strong>pred_time_test</strong></th>
+<th>pred_time_val</th>
+<th>fit_time</th>
+<th>pred_time_test_marginal</th>
+<th>pred_time_val_marginal</th>
+<th>fit_time_marginal</th>
+<th>stack_level</th>
+<th>can_infer</th>
+<th>fit_order</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>NeuralNetTorch</td>
+<td>0.999533</td>
+<td><strong>0.9320</strong></td>
+<td>0.079349</td>
+<td>0.021101</td>
+<td>22.859513</td>
+<td>0.079349</td>
+<td>0.021101</td>
+<td>22.859513</td>
+<td>1</td>
+<td>True</td>
+<td>12</td>
+</tr>
+<tr>
+<td>1</td>
+<td>NeuralNetFastAI</td>
+<td>0.999467</td>
+<td><strong>0.9328</strong></td>
+<td>0.237272</td>
+<td>0.052859</td>
+<td>46.644695</td>
+<td>0.237272</td>
+<td>0.052859</td>
+<td>46.644695</td>
+<td>1</td>
+<td>True</td>
+<td>10</td>
+</tr>
+<tr>
+<td>2</td>
+<td>LightGBMXT</td>
+<td>0.999133</td>
+<td><strong>0.9360</strong></td>
+<td>0.098287</td>
+<td>0.029206</td>
+<td>1.986610</td>
+<td>0.098287</td>
+<td>0.029206</td>
+<td>1.986610</td>
+<td>1</td>
+<td>True</td>
+<td>3</td>
+</tr>
+<tr>
+<td>3</td>
+<td>XGBoost</td>
+<td>0.998533</td>
+<td><strong>0.9352</strong></td>
+<td>0.018100</td>
+<td>0.009973</td>
+<td>1.708424</td>
+<td>0.018100</td>
+<td>0.009973</td>
+<td>1.708424</td>
+<td>1</td>
+<td>True</td>
+<td>11</td>
+</tr>
+<tr>
+<td>4</td>
+<td>CatBoost</td>
+<td>0.998333</td>
+<td><strong>0.9356</strong></td>
+<td>0.053169</td>
+<td>0.008051</td>
+<td>8.302693</td>
+<td>0.053169</td>
+<td>0.008051</td>
+<td>8.302693</td>
+<td>1</td>
+<td>True</td>
+<td>7</td>
+</tr>
+<tr>
+<td>5</td>
+<td>ExtraTreesGini</td>
+<td>0.997200</td>
+<td><strong>0.9336</strong></td>
+<td>0.599552</td>
+<td>0.129022</td>
+<td>2.926774</td>
+<td>0.599552</td>
+<td>0.129022</td>
+<td>2.926774</td>
+<td>1</td>
+<td>True</td>
+<td>8</td>
+</tr>
+<tr>
+<td>6</td>
+<td>ExtraTreesEntr</td>
+<td>0.997133</td>
+<td><strong>0.9344</strong></td>
+<td>0.732795</td>
+<td>0.096238</td>
+<td>2.703793</td>
+<td>0.732795</td>
+<td>0.096238</td>
+<td>2.703793</td>
+<td>1</td>
+<td>True</td>
+<td>9</td>
+</tr>
+<tr>
+<td>7</td>
+<td>LightGBM</td>
+<td>0.996867</td>
+<td><strong>0.9360</strong></td>
+<td>0.091236</td>
+<td>0.020051</td>
+<td>0.962924</td>
+<td>0.091236</td>
+<td>0.020051</td>
+<td>0.962924</td>
+<td>1</td>
+<td>True</td>
+<td>4</td>
+</tr>
+<tr>
+<td>8</td>
+<td>RandomForestEntr</td>
+<td>0.996600</td>
+<td><strong>0.9360</strong></td>
+<td>0.421602</td>
+<td>0.096128</td>
+<td>13.725857</td>
+<td>0.421602</td>
+<td>0.096128</td>
+<td>13.725857</td>
+<td>1</td>
+<td>True</td>
+<td>6</td>
+</tr>
+<tr>
+<td>9</td>
+<td>RandomForestGini</td>
+<td>0.996533</td>
+<td><strong>0.9344</strong></td>
+<td>0.435460</td>
+<td>0.218416</td>
+<td>12.675858</td>
+<td>0.435460</td>
+<td>0.218416</td>
+<td>12.675858</td>
+<td>1</td>
+<td>True</td>
+<td>5</td>
+</tr>
+<tr>
+<td>10</td>
+<td>LightGBMLarge</td>
+<td>0.995533</td>
+<td><strong>0.9380</strong></td>
+<td>0.202538</td>
+<td>0.036901</td>
+<td>2.375687</td>
+<td>0.202538</td>
+<td>0.036901</td>
+<td>2.375687</td>
+<td>1</td>
+<td>True</td>
+<td>13</td>
+</tr>
+<tr>
+<td>11</td>
+<td>WeightedEnsemble_L2</td>
+<td>0.995533</td>
+<td><strong>0.9380</strong></td>
+<td>0.209553</td>
+<td>0.040954</td>
+<td>3.814684</td>
+<td>0.007015</td>
+<td>0.004053</td>
+<td>1.438997</td>
+<td>2</td>
+<td>True</td>
+<td>14</td>
+</tr>
+<tr>
+<td>12</td>
+<td>KNeighborsUnif</td>
+<td>0.993600</td>
+<td><strong>0.9264</strong></td>
+<td>0.076322</td>
+<td>0.054854</td>
+<td>4.625237</td>
+<td>0.076322</td>
+<td>0.054854</td>
+<td>4.625237</td>
+<td>1</td>
+<td>True</td>
+<td>1</td>
+</tr>
+<tr>
+<td>13</td>
+<td>KNeighborsDist</td>
+<td>0.979933</td>
+<td><strong>0.9136</strong></td>
+<td>0.085319</td>
+<td>0.023937</td>
+<td>0.146608</td>
+<td>0.085319</td>
+<td>0.023937</td>
+<td>0.146608</td>
+<td>1</td>
+<td>True</td>
+<td>2</td>
+</tr>
+</tbody>
+</table>
+<p><strong>结果证明，二分类中样本正反比率对模型精确度有较大影响。</strong></p>
+<h2 id="总结">总结</h2>
+<p>本次实验主要是对<code>游戏数据最终样本.csv</code>进行二分类问题研究，实验结论如下：</p>
+<ol>
+<li>在此样本下，随机森林精确率最高，神经网络表现不如随机森林。</li>
+<li>卷积神经网络和全连接神经网络在此二分类问题上的表现差别不大。</li>
+<li>二分类问题中，在同一样本比例下，样本数量对结果准确率有一点影响，在1%以内，几乎没有。</li>
+<li>二分类问题中样本比率对模型精确率影响较大，通过修改样本比率可使精确率达到95%甚至更高。</li>
+</ol>
+
+    </div>
+</article>
+
+
+
+
+
+            </div>
+            <aside class="col-12 col-md-3 float-left sidebar">
+    
+    <div class="sidebar-item sidebar-pages">
+        <h3>Pages</h3>
+        <ul>
+            
+            <li>
+                <a href="/">Home</a>
+            </li>
+            
+            <li>
+                <a href="/search/">Search</a>
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div class="sidebar-item sidebar-links">
+        <h3>Links</h3>
+        <ul>
+            
+            <li>
+                <a href="https://github.com/gruiaaa" target="_blank"><span>GitHub</span></a>
+            </li>
+            
+            <li>
+                <a href="https://gitee.com/Gruia/" target="_blank"><span>Gtiee</span></a>
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div class="sidebar-item sidebar-tags">
+        <h3>Tags</h3>
+        <div>
+            
+        </div>
+    </div>
+    <div class="sidebar-item sidebar-toc">
+        <h3>Table of Contents</h3><nav id="TableOfContents">
+  <ul>
+    <li><a href="#手动搭建全连接网络与卷积神经网络对比分析">手动搭建全连接网络与卷积神经网络对比分析</a>
+      <ul>
+        <li><a href="#全连接网络">全连接网络</a></li>
+        <li><a href="#卷积神经网络分析">卷积神经网络分析</a></li>
+      </ul>
+    </li>
+    <li><a href="#autogluon框架自动调参结果分析">Autogluon框架自动调参结果分析</a></li>
+    <li><a href="#结果分析">结果分析</a></li>
+    <li><a href="#样本比例对模型精度影响分析">样本比例对模型精度影响分析</a>
+      <ul>
+        <li><a href="#方式1-比例变且样本量变">方式1 比例变且样本量变</a></li>
+        <li><a href="#方式2-比例变但样本量不变">方式2 比例变但样本量不变</a></li>
+      </ul>
+    </li>
+    <li><a href="#总结">总结</a></li>
+  </ul>
+</nav></div>
+</aside>
+
+        </div>
+        <div class="btn">
+    <div class="btn-menu" id="btn-menu">
+        <i class="iconfont icon-grid-sharp"></i>
+    </div>
+    <div class="btn-toggle-mode">
+        <i class="iconfont icon-contrast-sharp"></i>
+    </div>
+    <div class="btn-scroll-top">
+        <i class="iconfont icon-chevron-up-circle-sharp"></i>
+    </div>
+</div>
+<aside class="sidebar-mobile" style="display: none;">
+  <div class="sidebar-wrapper">
+    
+    <div class="sidebar-item sidebar-pages">
+        <h3>Pages</h3>
+        <ul>
+            
+            <li>
+                <a href="/">Home</a>
+            </li>
+            
+            <li>
+                <a href="/search/">Search</a>
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div class="sidebar-item sidebar-links">
+        <h3>Links</h3>
+        <ul>
+            
+            <li>
+                <a href="https://github.com/gruiaaa" target="_blank"><span>GitHub</span></a>
+            </li>
+            
+            <li>
+                <a href="https://gitee.com/Gruia/" target="_blank"><span>Gtiee</span></a>
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div class="sidebar-item sidebar-tags">
+        <h3>Tags</h3>
+        <div>
+            
+        </div>
+    </div>
+    
+    
+    
+    <div class="sidebar-item sidebar-toc">
+        <h3>Table of Contents</h3>
+        <nav id="TableOfContents">
+  <ul>
+    <li><a href="#手动搭建全连接网络与卷积神经网络对比分析">手动搭建全连接网络与卷积神经网络对比分析</a>
+      <ul>
+        <li><a href="#全连接网络">全连接网络</a></li>
+        <li><a href="#卷积神经网络分析">卷积神经网络分析</a></li>
+      </ul>
+    </li>
+    <li><a href="#autogluon框架自动调参结果分析">Autogluon框架自动调参结果分析</a></li>
+    <li><a href="#结果分析">结果分析</a></li>
+    <li><a href="#样本比例对模型精度影响分析">样本比例对模型精度影响分析</a>
+      <ul>
+        <li><a href="#方式1-比例变且样本量变">方式1 比例变且样本量变</a></li>
+        <li><a href="#方式2-比例变但样本量不变">方式2 比例变但样本量不变</a></li>
+      </ul>
+    </li>
+    <li><a href="#总结">总结</a></li>
+  </ul>
+</nav>
+    </div>
+    
+    
+  </div>
+</aside>
+    </main>
+
+    <footer>
+    <div class="container-lg clearfix">
+        <div class="col-12 footer">
+            - Gruia -
+        </div>
+    </div>
+</footer>
+
+    
+<script defer src="https://cdn.jsdelivr.net/npm/medium-zoom@1.0.6/dist/medium-zoom.min.js" integrity="sha512-N9IJRoc3LaP3NDoiGkcPa4gG94kapGpaA5Zq9/Dr04uf5TbLFU5q0o8AbRhLKUUlp8QFS2u7S+Yti0U7QtuZvQ==" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js" integrity="sha512-q583ppKrCRc7N5O0n2nzUiJ+suUv7Et1JGels4bXOaMFQcamPk9HjdUknZuuFjBNs7tsMuadge5k9RzdmO+1GQ==" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.27.0/components/prism-core.min.js" integrity="sha512-LCKPTo0gtJ74zCNMbWw04ltmujpzSR4oW+fgN+Y1YclhM5ZrHCZQAJE4quEodcI/G122sRhSGU2BsSRUZ2Gu3w==" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.27.0/plugins/autoloader/prism-autoloader.min.js" integrity="sha512-GP4x8UWxWyh4BMbyJGOGneiTbkrWEF5izsVJByzVLodP8CuJH/n936+yQDMJJrOPUHLgyPbLiGw2rXmdvGdXHA==" crossorigin="anonymous"></script>
+
+
+
+<script defer src="/assets/js/fuji.min.645f1123be695831f419ab54c1bcba327325895c740014006e57070d4f3e5d6b553e929c4b46f40ea707249e9c7f7c2a446d32a39ce7319f80a34525586a8e0f.js" integrity="sha512-ZF8RI75pWDH0GatUwby6MnMliVx0ABQAblcHDU8&#43;XWtVPpKcS0b0DqcHJJ6cf3wqRG0yo5znMZ&#43;Ao0UlWGqODw=="></script>
+
+
+
+</body>
+
+</html>
