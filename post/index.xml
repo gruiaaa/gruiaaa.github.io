@@ -6,7 +6,16 @@
     <description>Recent content in Posts on GRUIA</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Sat, 04 Mar 2023 23:27:00 +0800</lastBuildDate><atom:link href="https://gruiaaa.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 09 Nov 2023 21:28:35 +0800</lastBuildDate><atom:link href="https://gruiaaa.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Y2023M10M11进展</title>
+      <link>https://gruiaaa.github.io/post/y2023m10m11%E8%BF%9B%E5%B1%95/</link>
+      <pubDate>Thu, 09 Nov 2023 21:28:35 +0800</pubDate>
+      
+      <guid>https://gruiaaa.github.io/post/y2023m10m11%E8%BF%9B%E5%B1%95/</guid>
+      <description>游戏数据实验分析记录 2023-10 增量特征选择 data：202303to04 game_data_202303to04.csv method 首先使用随机森林过一遍数据，得到特征的重要性，按重要性依次增加特征直到精确度没有明显提高 result Selected Features: [&#39;latest_login_day&#39;, &#39;login_days&#39;, &#39;loss_count&#39;] Number of Features (N): 3 Accuracy: 0.8421 F1 Score: 0.5970 Precision: 0.5917 Recall: 0.6025 ======================================== Selected</description>
+    </item>
+    
     <item>
       <title>可行性分析</title>
       <link>https://gruiaaa.github.io/post/%E5%8F%AF%E8%A1%8C%E6%80%A7%E5%88%86%E6%9E%90/</link>
@@ -14,15 +23,6 @@
       
       <guid>https://gruiaaa.github.io/post/%E5%8F%AF%E8%A1%8C%E6%80%A7%E5%88%86%E6%9E%90/</guid>
       <description>关于使用深度学习提高模型精确率至95% 可行性分析 [toc] 结论：在此数据集(样本正反比例)下不行 结论依据从如下两方面讨论 手动搭建全连接网络与卷积神经网络对比分析 Autogluon框架自动调参结果分析 样本比例对</description>
-    </item>
-    
-    <item>
-      <title>Jeff</title>
-      <link>https://gruiaaa.github.io/post/jeff/</link>
-      <pubDate>Tue, 28 Feb 2023 12:26:34 +0800</pubDate>
-      
-      <guid>https://gruiaaa.github.io/post/jeff/</guid>
-      <description>link：【Jeff】22天练出腹肌（2023年版） 1.下腹卷尖刺 10个一组，间隔休息10s 2.坐姿提膝转腿 45s为一组，间隔休息10s，力竭 3.爆发起身 10个一组，间隔休息10s，力竭 4.坐姿高位转</description>
     </item>
     
     <item>
